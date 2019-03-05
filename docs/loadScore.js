@@ -183,6 +183,10 @@ const showSaveFileDialog = (data, name, type) => {
  */
 const main = () => {
 
+	// 取得開始
+	document.write('取得中です...<br>');
+	document.write('ブックマークレットを続けて実行しないでください<br>');
+
 	// テスト
 	/*
 	loadScoreOfInitial(initials[0]).then(array => {
@@ -203,6 +207,7 @@ const main = () => {
 
 		// 結果保存
 		console.log('取得終了 (' + array.length + ' 曲)');
+		document.write('取得終了 (' + array.length + ' 曲)<br>');
 		const json = JSON.stringify(array, null, '    ');
 		showSaveFileDialog(json, 'score.json', 'application/json');
 
