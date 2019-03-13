@@ -1,6 +1,6 @@
 (() => {
 
-	const DEBUG = true;
+	const DEBUG = false;
 
 	// エラーチェック
 	if ( document.domain !== 'p.eagate.573.jp' ) {
