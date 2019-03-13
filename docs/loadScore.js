@@ -10,7 +10,7 @@
 
 	// 重複起動チェック
 	if ( window.BOOKMARKLET_TOOL_POPN ) {
-		document.body.insertAdjacentHTML('beforeend', '既に実行中です<br>');
+		document.body.insertAdjacentHTML('beforeend', '既に実行済みです<br>');
 		return;
 	}
 
@@ -208,7 +208,7 @@
 		if ( DEBUG ) { // テスト
 
 			loadScoreOfInitial(initials[0]).then(array => {
-				console.log('取得終了 (' + array.length + ' 曲)');
+				document.body.insertAdjacentHTML('beforeend', '取得終了 (' + array.length + ' 曲)<br>');
 				const json = JSON.stringify(array, null, '    ');
 				showSaveFileDialog(json, 'score.json', 'application/json')
 			});
