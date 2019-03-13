@@ -8,6 +8,26 @@
 		return;
 	}
 
+	if ( ! ea_common_template.userstatus.state.login ) {
+		document.body.innerHTML = 'ログインしてください<br>';
+		return;
+	}
+
+	if ( ! ea_common_template.userstatus.state.subscription ) {
+		document.body.innerHTML = 'e-amusement 有料サービスへの加入が必要です<br>';
+		return;
+	}
+
+	if ( ! ea_common_template.userstatus.state.eapass ) {
+		document.body.innerHTML = '参照中の e-amusement pass がありません<br>';
+		return;
+	}
+
+	if ( ! ea_common_template.userstatus.state.playdata ) {
+		document.body.innerHTML = 'プレーデータがありません<br>';
+		return;
+	}
+
 	// 重複起動チェック
 	if ( window.BOOKMARKLET_TOOL_POPN ) {
 		document.body.insertAdjacentHTML('beforeend', '既に実行済みです<br>');
