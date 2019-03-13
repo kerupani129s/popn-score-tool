@@ -55,12 +55,14 @@ const printScore = array => {
 
 	// 表示
 	const html = '<table style="float: left; margin-right: 20px;">' +
-		'<tr><th></th>' + types.map(type => '<th>' + type.toUpperCase() + '</th>').join('') + '</tr>' +
-		tableMedals.map((row, i) => '<tr><th><img src="https://p.eagate.573.jp/game/popn/peace/p/images/p/common/medal/' + medals[i] + '"></th>' + row.map(cell => '<td>' + cell + '</td>').join('') + '</tr>').join('') +
+		'<tr><th></th>' + types.map(type => '<th>' + type.toUpperCase() + '</th>').join('') + '<th>合計</th></tr>' +
+		tableMedals.map((row, i) => '<tr><th><img src="https://p.eagate.573.jp/game/popn/peace/p/images/p/common/medal/' + medals[i] + '"></th>' + row.map(cell => '<td>' + cell + '</td>').join('') + '<td>' + row.reduce((sum, cell) => sum + cell) + '</td></tr>').join('') +
+		'<tr><th>PLAY</th>' + types.map((type, i) => '<td>' + tableMedals.reduce((sum, row) => sum + row[i], 0) + '</td>').join('') + '<td>' + tableMedals.reduce((sum, row) => sum + row.reduce((sum, cell) => sum + cell), 0) + '</td></tr>' +
 		'</table>' +
 		'<table>' +
-		'<tr><th></th>' + types.map(type => '<th>' + type.toUpperCase() + '</th>').join('') + '</tr>' +
-		tableRanks.map((row, i) => '<tr><th><img src="https://p.eagate.573.jp/game/popn/peace/p/images/p/common/medal/' + ranks[i] + '"></th>' + row.map(cell => '<td>' + cell + '</td>').join('') + '</tr>').join('') +
+		'<tr><th></th>' + types.map(type => '<th>' + type.toUpperCase() + '</th>').join('') + '<th>合計</th></tr>' +
+		tableRanks.map((row, i) => '<tr><th><img src="https://p.eagate.573.jp/game/popn/peace/p/images/p/common/medal/' + ranks[i] + '"></th>' + row.map(cell => '<td>' + cell + '</td>').join('') + '<td>' + row.reduce((sum, cell) => sum + cell) + '</td></tr>').join('') +
+		'<tr><th>RANK</th>' + types.map((type, i) => '<td>' + tableRanks.reduce((sum, row) => sum + row[i], 0) + '</td>').join('') + '<td>' + tableRanks.reduce((sum, row) => sum + row.reduce((sum, cell) => sum + cell), 0) + '</td></tr>' +
 		'</table>';
 
 	document.getElementById('result').innerHTML = html;
