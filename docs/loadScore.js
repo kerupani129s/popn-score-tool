@@ -2,11 +2,13 @@
 
 	const DEBUG = true;
 
+	// エラーチェック
 	if ( document.domain !== 'p.eagate.573.jp' ) {
 		document.body.innerHTML = '<a href="https://p.eagate.573.jp/">https://p.eagate.573.jp/</a> 上で実行してください<br>';
 		return;
 	}
 
+	// 重複起動チェック
 	if ( typeof BOOKMARKLET_TOOL_POPN !== 'undefined' ) {
 		document.body.insertAdjacentHTML('beforeend', '既に実行中です<br>');
 		return;
