@@ -4,20 +4,23 @@
     <meta charset="utf-8" />
     <meta name="referrer" content="no-referrer">
     <title>ポップンスコアツール</title>
+    <script src="ifie.js"></script>
     <script src="main.js"></script>
   </head>
   <body>
     使用は自己責任でお願いします。<br>
     <br>
-    1. <a href="javascript:const s=document.createElement('script');s.src='https://kerupani129s.github.io/popn-score-tool/loadScore.js';document.head.appendChild(s);">ブックマークレット</a> をブックマークに登録します。<br>
-    (リンクをブックマークバーまでドラッグ＆ドロップすると便利です。)<br>
+    1. <a href="javascript:(()=>{const s=document.createElement('script');s.src='https://kerupani129s.github.io/popn-score-tool/loadScore.js';document.head.appendChild(s);})();">ブックマークレット</a> をブックマークに登録します。<br>
+    (PC ではリンクをブックマークバーまでドラッグ＆ドロップすると便利です。)<br>
+    コピー＆ペースト用：
+    <div style="font-family: monospace; margin: 2px; padding: 5px; background-color: #f0f0f0;"><span style="color: #969696;">javascript:</span>(()=&gt;{<span style="color: #0000ff;">const</span> s=<span style="color: #0000ff;">document</span>.createElement(<span style="color: #777700;">'script'</span>);s.src=<span style="color: #777700;">'https://kerupani129s.github.io/popn-score-tool/loadScore.js'</span>;<span style="color: #0000ff;">document</span>.head.appendChild(s);})();</div>
     <br>
     2. https://p.eagate.573.jp/ 上でブックマークレットを実行します。<br>
-    ログイン状態かつ月額課金サービスに加入している必要があります。<br>
-    成功すると JSON の保存ダイアログが表示されます。<br>
-    (サーバーに負荷がかかると思うので、続けて何度も実行しないでください。)<br>
+    ログイン状態かつ e-amusement 有料サービスに加入している必要があります。<br>
+    成功するとスコアデータ (JSON 形式) の保存ダイアログが表示されます。<br>
+    (サーバーに負荷がかかるので、続けて何度も実行しないでください。)<br>
     <br>
-    3. 保存した JSON ファイルを開きます。<br>
+    3. 保存したスコアデータ (JSON 形式) を開いて表示します。<br>
     <input type="file" accept=".json, application/json" name="file" id="file">
     <div id="result"></div>
   </body>
