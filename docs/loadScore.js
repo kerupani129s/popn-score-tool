@@ -1,3 +1,5 @@
+const DEBUG = true;
+
 /**
  * 頭文字リスト
  * 
@@ -187,31 +189,33 @@ const main = () => {
 	document.write('取得中です...<br>');
 	document.write('ブックマークレットを続けて実行しないでください<br>');
 
-	// テスト
-	/*
-	loadScoreOfInitial(initials[0]).then(array => {
-		console.log('取得終了 (' + array.length + ' 曲)');
-		const json = JSON.stringify(array, null, '    ');
-		showSaveFileDialog(json, 'score.json', 'application/json')
-	});
-	*/
+	// 取得
+	if ( DEBUG ) { // テスト
 
-	// 
-	const promises = initials.map(initial => loadScoreOfInitial(initial));
+		loadScoreOfInitial(initials[0]).then(array => {
+			console.log('取得終了 (' + array.length + ' 曲)');
+			const json = JSON.stringify(array, null, '    ');
+			showSaveFileDialog(json, 'score.json', 'application/json')
+		});
 
-	Promise.all(promises).then(arrays => {
+	} else { // 本番
 
-		const array = arrays
-			.reduce((accumulator, currentValue) => accumulator.concat(currentValue)) // Promise.all() の結果をまとめる
-			.filter((x, i, a) => a.findIndex(x2 => x.id === x2.id) === i); // 重複削除
+		const promises = initials.map(initial => loadScoreOfInitial(initial));
 
-		// 結果保存
-		console.log('取得終了 (' + array.length + ' 曲)');
-		document.write('取得終了 (' + array.length + ' 曲)<br>');
-		const json = JSON.stringify(array, null, '    ');
-		showSaveFileDialog(json, 'score.json', 'application/json');
+		Promise.all(promises).then(arrays => {
 
-	});
+			const array = arrays
+				.reduce((accumulator, currentValue) => accumulator.concat(currentValue)) // Promise.all() の結果をまとめる
+				.filter((x, i, a) => a.findIndex(x2 => x.id === x2.id) === i); // 重複削除
+
+			// 結果保存
+			document.write('取得終了 (' + array.length + ' 曲)<br>');
+			const json = JSON.stringify(array, null, '    ');
+			showSaveFileDialog(json, 'score.json', 'application/json');
+
+		});
+
+	}
 
 };
 
