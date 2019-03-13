@@ -195,7 +195,7 @@
 	const main = () => {
 
 		// 取得開始
-		document.write('取得中です...<br>');
+		document.body.innerHTML = '取得中...<br>';
 
 		// 取得
 		if ( DEBUG ) { // テスト
@@ -217,7 +217,7 @@
 					.filter((x, i, a) => a.findIndex(x2 => x.id === x2.id) === i); // 重複削除
 
 				// 結果保存
-				document.write('取得終了 (' + array.length + ' 曲)<br>');
+				document.body.insertAdjacentHTML('beforeend', '取得終了 (' + array.length + ' 曲)<br>');
 				const json = JSON.stringify(array, null, '    ');
 				showSaveFileDialog(json, 'score.json', 'application/json');
 
