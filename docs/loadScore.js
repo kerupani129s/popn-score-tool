@@ -9,7 +9,7 @@
 	}
 
 	// 重複起動チェック
-	if ( typeof BOOKMARKLET_TOOL_POPN !== 'undefined' ) {
+	if ( window.BOOKMARKLET_TOOL_POPN ) {
 		document.body.insertAdjacentHTML('beforeend', '既に実行中です<br>');
 		return;
 	}
