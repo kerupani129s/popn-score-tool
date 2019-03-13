@@ -2,6 +2,13 @@
 
 	const DEBUG = true;
 
+	if ( typeof BOOKMARKLET_TOOL_POPN !== 'undefined' ) {
+		document.body.insertAdjacentHTML('beforeend', '既に実行中です<br>');
+		return;
+	}
+
+	window.BOOKMARKLET_TOOL_POPN = true;
+
 	/**
 	 * 頭文字リスト
 	 * 
@@ -189,7 +196,6 @@
 
 		// 取得開始
 		document.write('取得中です...<br>');
-		document.write('ブックマークレットを続けて実行しないでください<br>');
 
 		// 取得
 		if ( DEBUG ) { // テスト
