@@ -56,7 +56,8 @@
 		const tableRanks = ranks.map(rank => types.map(type => array.filter(x => x.score[type].rank === rank).length));
 
 		// 表示
-		const html = '<table style="float: left; margin-right: 20px;">' +
+		const html = '<div class="tables">' +
+			'<table>' +
 			'<tr><th></th>' + types.map(type => '<th>' + type.toUpperCase() + '</th>').join('') + '<th>合計</th></tr>' +
 			tableMedals.map((row, i) => '<tr><th><img src="https://p.eagate.573.jp/game/popn/peace/p/images/p/common/medal/' + medals[i] + '"></th>' + row.map(cell => '<td>' + cell + '</td>').join('') + '<td>' + row.reduce((sum, cell) => sum + cell) + '</td></tr>').join('') +
 			'<tr><th>PLAY</th>' + types.map((type, i) => '<td>' + tableMedals.reduce((sum, row) => sum + row[i], 0) + '</td>').join('') + '<td>' + tableMedals.reduce((sum, row) => sum + row.reduce((sum, cell) => sum + cell), 0) + '</td></tr>' +
@@ -65,7 +66,8 @@
 			'<tr><th></th>' + types.map(type => '<th>' + type.toUpperCase() + '</th>').join('') + '<th>合計</th></tr>' +
 			tableRanks.map((row, i) => '<tr><th><img src="https://p.eagate.573.jp/game/popn/peace/p/images/p/common/medal/' + ranks[i] + '"></th>' + row.map(cell => '<td>' + cell + '</td>').join('') + '<td>' + row.reduce((sum, cell) => sum + cell) + '</td></tr>').join('') +
 			'<tr><th>RANK</th>' + types.map((type, i) => '<td>' + tableRanks.reduce((sum, row) => sum + row[i], 0) + '</td>').join('') + '<td>' + tableRanks.reduce((sum, row) => sum + row.reduce((sum, cell) => sum + cell), 0) + '</td></tr>' +
-			'</table>';
+			'</table>' +
+			'</div>';
 
 		document.getElementById('result').innerHTML = html;
 
