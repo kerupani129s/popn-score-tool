@@ -1,0 +1,31 @@
+/* コード */
+.code {
+	font-family: monospace;
+	margin: 2px;
+	padding: 5px;
+	background-color: #f0f0f0;
+	word-break: break-all;
+}
+
+.code .comment {
+	color: #969696;
+}
+
+.code .statement {
+	color: #0000ff;
+}
+
+.code .constant {
+	color: #777700;
+}
+
+/* テーブル */
+.tables {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.tables table {
+	margin: 10px;
+}
