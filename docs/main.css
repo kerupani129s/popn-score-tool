@@ -15,6 +15,10 @@
 	color: #0000ff;
 }
 
+.code .type {
+	color: #0000ff;
+}
+
 .code .constant {
 	color: #777700;
 }
