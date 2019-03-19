@@ -13,9 +13,8 @@
 - 確認済み
 	- PC 版 Chrome 72
 	- PC 版 Firefox 65
+	- PC 版 Edge 42
 	- Android 版 Chrome 72
-- 未対応
-	- PC 版 Edge
 - 非対応
 	- Internet Explorer
 

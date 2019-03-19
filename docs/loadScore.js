@@ -184,7 +184,7 @@
 
 		const url = 'https://p.eagate.573.jp/game/popn/peace/p/playdata/mu_top.html?page=' + page + '&genre=' + initial;
 
-		return fetch(url)
+		return fetch(url, {credentials: 'include'})
 			.then(response  => response.blob())
 			.then(blob => parseBlob(blob))
 			.then(string => {
