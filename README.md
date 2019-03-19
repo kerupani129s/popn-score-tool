@@ -12,9 +12,9 @@
 
 - 確認済み
 	- PC 版 Chrome 72
+	- PC 版 Firefox 65
 	- Android 版 Chrome 72
-- 未確認。おそらく動作
-	- PC 版 Firefox
+- 未対応
 	- PC 版 Edge
 - 非対応
 	- Internet Explorer
