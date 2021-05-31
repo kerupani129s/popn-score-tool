@@ -1,4 +1,4 @@
-/* コード */
+/* シンタックスハイライト */
 .code {
 	font-family: monospace;
 	margin: 2px;
@@ -12,10 +12,6 @@
 }
 
 .code .statement {
-	color: #0000ff;
-}
-
-.code .type {
 	color: #0000ff;
 }
 

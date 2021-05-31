@@ -180,21 +180,22 @@
 	 */
 	const loadScoreOfInitial = initial => loadScoreOfPage(initial, 0);
 
-	const loadScoreOfPage = (initial, page) => {
+	const loadScoreOfPage = async (initial, page) => {
 
-		const url = 'https://p.eagate.573.jp/game/popn/peace/p/playdata/mu_top.html?page=' + page + '&genre=' + initial;
+		const url = 'https://p.eagate.573.jp/game/popn/riddles/playdata/mu_top.html?page=' + page + '&genre=' + initial;
 
-		return fetch(url, {credentials: 'include'})
-			.then(response  => response.blob())
-			.then(blob => parseBlob(blob))
-			.then(string => {
-				const array = parsePage(parseHTML(string));
-				if ( array.length === 20 ) {
-					return loadScoreOfPage(initial, page + 1).then(arrayNext => array.concat(arrayNext));
-				} else {
-					return array;
-				}
-			});
+		const response = await fetch(url, {credentials: 'include'});
+		const blob = await response.blob();
+		const str = await parseBlob(blob);
+
+		const array = parsePage(parseHTML(str));
+
+		if ( array.length === 20 ) {
+			const arrayNext = await loadScoreOfPage(initial, page + 1);
+			return array.concat(arrayNext);
+		} else {
+			return array;
+		}
 
 	};
 
@@ -219,7 +220,7 @@
 	/**
 	 * メイン
 	 */
-	const main = () => {
+	const main = async () => {
 
 		// 取得開始
 		document.body.innerHTML = '取得中...<br>';
@@ -227,28 +228,26 @@
 		// 取得
 		if ( DEBUG ) { // テスト
 
-			loadScoreOfInitial(initials[0]).then(array => {
-				document.body.insertAdjacentHTML('beforeend', '取得終了 (' + array.length + ' 曲)<br>');
-				const json = JSON.stringify(array, null, '    ');
-				showSaveFileDialog(json, 'score.json', 'application/json')
-			});
+			const array = await loadScoreOfInitial(initials[0]);
+
+			document.body.insertAdjacentHTML('beforeend', '取得終了 (' + array.length + ' 曲)<br>');
+			const json = JSON.stringify(array, null, '    ');
+			showSaveFileDialog(json, 'score.json', 'application/json')
 
 		} else { // 本番
 
 			const promises = initials.map(initial => loadScoreOfInitial(initial));
 
-			Promise.all(promises).then(arrays => {
+			const arrays = await Promise.all(promises);
 
-				const array = arrays
-					.reduce((accumulator, currentValue) => accumulator.concat(currentValue)) // Promise.all() の結果をまとめる
-					.filter((x, i, a) => a.findIndex(x2 => x.id === x2.id) === i); // 重複削除
+			const array = arrays
+				.reduce((accumulator, currentValue) => accumulator.concat(currentValue)) // Promise.all() の結果をまとめる
+				.filter((x, i, a) => a.findIndex(x2 => x.id === x2.id) === i); // 重複削除
 
-				// 結果保存
-				document.body.insertAdjacentHTML('beforeend', '取得終了 (' + array.length + ' 曲)<br>');
-				const json = JSON.stringify(array, null, '    ');
-				showSaveFileDialog(json, 'score.json', 'application/json');
-
-			});
+			// 結果保存
+			document.body.insertAdjacentHTML('beforeend', '取得終了 (' + array.length + ' 曲)<br>');
+			const json = JSON.stringify(array, null, '    ');
+			showSaveFileDialog(json, 'score.json', 'application/json');
 
 		}
 
