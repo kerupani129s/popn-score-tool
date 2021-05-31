@@ -182,7 +182,7 @@
 
 	const loadScoreOfPage = (initial, page) => {
 
-		const url = 'https://p.eagate.573.jp/game/popn/peace/p/playdata/mu_top.html?page=' + page + '&genre=' + initial;
+		const url = 'https://p.eagate.573.jp/game/popn/riddles/playdata/mu_top.html?page=' + page + '&genre=' + initial;
 
 		return fetch(url, {credentials: 'include'})
 			.then(response  => response.blob())
