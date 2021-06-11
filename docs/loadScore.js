@@ -67,6 +67,7 @@
 		return new Promise(resolve => {
 			const reader = new FileReader();
 			reader.onload = () => { resolve(reader.result) };
+			reader.onerror = () => { reader.abort(); reject(reader.error); };
 			reader.readAsText(blob, 'shift-jis');
 		});
 	};
