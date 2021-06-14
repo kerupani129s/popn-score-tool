@@ -1,31 +1,84 @@
+/* 全般 */
+table {
+	border-collapse: separate;
+	border-spacing: 0;
+}
+
+img {
+	vertical-align: top;
+}
+
 /* シンタックスハイライト */
 .code {
 	font-family: monospace;
 	margin: 2px;
 	padding: 5px;
-	background-color: #f0f0f0;
+	background-color: #fafafa;
 	word-break: break-all;
 }
 
-.code .comment {
+.code--comment {
 	color: #969696;
 }
 
-.code .statement {
+.code--statement {
 	color: #0000ff;
 }
 
-.code .constant {
+.code--constant {
 	color: #777700;
 }
 
 /* テーブル */
-.tables {
+.total-tables {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
+	align-items: flex-start;
 }
 
-.tables table {
+.total-table {
 	margin: 10px;
+}
+
+.total-table td {
+	text-align: right;
+}
+
+.total-table td, .total-table th {
+	border: 1px #fff solid;
+}
+
+.total-table td.total-table--selected-cell,
+.total-table th.total-table--selected-cell {
+	background-color: #f0f8ff;
+	border-color: #0080ff;
+}
+
+.total-table--selected-all {
+	background-color: #f0f8ff;
+}
+
+.total-table--selected-row {
+	background-color: #f0f8ff;
+}
+
+.total-table--selected-column-1 td:nth-child(2),
+.total-table--selected-column-1 th:nth-child(2) {
+	background-color: #f0f8ff;
+}
+
+.total-table--selected-column-2 td:nth-child(3),
+.total-table--selected-column-2 th:nth-child(3) {
+	background-color: #f0f8ff;
+}
+
+.total-table--selected-column-3 td:nth-child(4),
+.total-table--selected-column-3 th:nth-child(4) {
+	background-color: #f0f8ff;
+}
+
+.total-table--selected-column-4 td:nth-child(5),
+.total-table--selected-column-4 th:nth-child(5) {
+	background-color: #f0f8ff;
 }
