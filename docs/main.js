@@ -1,7 +1,9 @@
 (() => {
 
 	// 定数
-	const resultsLimit = 20;
+	const resultsLimit   = 20;
+	const pagesLimit     = 9;
+	const pagesLimitHalf = Math.floor(pagesLimit / 2);
 
 	const types = ['easy', 'normal', 'hyper', 'ex'];
 
@@ -296,41 +298,51 @@
 
 		let paginationHTML = '';
 
-		if ( 2 <= pageNo && pageNo <= 7 ) {
+		if ( pageLast <= pagesLimit ) {
 
-			for (let i = 1; i < pageNo; i++) {
-				paginationHTML += getPageNumberHTML(i);
+			for (let p = 1; p <= pageLast; p++) {
+				paginationHTML += getPageNumberHTML(p, pageNo === p);
 			}
 
-		} else if ( 8 <= pageNo ) {
+		} else {
 
-			paginationHTML += getPageNumberHTML(1);
+			if ( pagesLimitHalf + 2 <= pageNo ) {
 
-			paginationHTML += '<span class="page-ellipses">...</span>';
+				paginationHTML += getPageNumberHTML(1);
 
-			for (let i = pageNo - 4; i <= pageNo - 1; i++) {
-				paginationHTML += getPageNumberHTML(i);
+				if ( pagesLimitHalf + 3 <= pageNo )
+					paginationHTML += '<span class="page-ellipses">...</span>';
+
 			}
 
-		}
+			if ( pageNo <= pagesLimitHalf ) {
 
-		paginationHTML += '<span class="page-number page-number--current">' + pageNo + '</span>';
+				for (let p = 1; p <= pagesLimit; p++) {
+					paginationHTML += getPageNumberHTML(p, pageNo === p);
+				}
 
-		if ( pageLast - 6 <= pageNo && pageNo <= pageLast - 1 ) {
+			} else if ( pageLast - pagesLimitHalf <= pageNo ) {
 
-			for (let i = pageNo + 1; i <= pageLast; i++) {
-				paginationHTML += getPageNumberHTML(i);
+				for (let p = pageLast - pagesLimit + 1; p <=  pageLast; p++) {
+					paginationHTML += getPageNumberHTML(p, pageNo === p);
+				}
+
+			} else {
+
+				for (let p = pageNo - pagesLimitHalf; p <=  pageNo + pagesLimitHalf; p++) {
+					paginationHTML += getPageNumberHTML(p, pageNo === p);
+				}
+
 			}
 
-		} else if ( pageNo <= pageLast - 7 ) {
+			if ( pageNo <= pageLast - pagesLimitHalf - 1 ) {
 
-			for (let i = pageNo + 1; i <= pageNo + 4; i++) {
-				paginationHTML += getPageNumberHTML(i);
+				if ( pageNo <= pageLast - pagesLimitHalf - 2 )
+					paginationHTML += '<span class="page-ellipses">...</span>';
+
+				paginationHTML += getPageNumberHTML(pageLast);
+
 			}
-
-			paginationHTML += '<span class="page-ellipses">...</span>';
-
-			paginationHTML += getPageNumberHTML(pageLast);
 
 		}
 
@@ -351,7 +363,7 @@
 
 	};
 
-	const getPageNumberHTML = pageNo => '<span class="page-number" data-page-no="' + pageNo + '">' + pageNo + '</span>';
+	const getPageNumberHTML = (pageNo, isCurrentPage = false) => (isCurrentPage ? '<span class="page-number page-number--current">' + pageNo + '</span>' : '<span class="page-number" data-page-no="' + pageNo + '">' + pageNo + '</span>');
 
 	const escapeHTML = html => html.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 
