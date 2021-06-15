@@ -1,6 +1,8 @@
 (() => {
 
 	// 定数
+	const resultsLimit = 20;
+
 	const types = ['easy', 'normal', 'hyper', 'ex'];
 
 	const medals = [
@@ -23,7 +25,8 @@
 	const data = {
 		results: null,
 		filteredResults: null,
-		resultsElement: null
+		resultsElement: null,
+		paginationElements: null
 	};
 
 	// 
@@ -99,6 +102,9 @@
 
 		data.resultsElement = document.getElementById('results');
 
+		data.paginationElements = ['paginationHeader', 'paginationFooter'].map(id => document.getElementById(id));
+
+		// 
 		filterResults(medalsTable, 0, 0);
 
 		// 
@@ -197,7 +203,7 @@
 		}
 
 		updateTotalTable(tableElement, row, column, rowInner === null, columnInner === null); // メモ: 否定演算子 ! にしてしまうと 0 も true になってしまう
-		updateFilteredResult(20, 0);
+		updateFilteredResult(0);
 
 	};
 
@@ -263,9 +269,14 @@
 
 	};
 
-	const updateFilteredResult = (limit, offset = 0) => {
+	const updateFilteredResult = (pageIndex = 0) => {
 
-		const selectedResults = data.filteredResults.slice(offset, offset + limit);
+		const filteredResults = data.filteredResults;
+
+		// リザルト表
+		const offset = pageIndex * resultsLimit;
+
+		const selectedResults = filteredResults.slice(offset, offset + resultsLimit);
 
 		const tableRanksHTML = '<table class="results-table" id="resultsTable">' +
 			'<thead><tr>' +
@@ -278,7 +289,69 @@
 
 		data.resultsElement.innerHTML = tableRanksHTML;
 
+		// ページネーション
+		const pageLast = Math.ceil(filteredResults.length / resultsLimit) || 1; // メモ: 0 ならば 1 に置き換え
+
+		const pageNo = pageIndex + 1;
+
+		let paginationHTML = '';
+
+		if ( 2 <= pageNo && pageNo <= 7 ) {
+
+			for (let i = 1; i < pageNo; i++) {
+				paginationHTML += getPageNumberHTML(i);
+			}
+
+		} else if ( 8 <= pageNo ) {
+
+			paginationHTML += getPageNumberHTML(1);
+
+			paginationHTML += '<span class="page-ellipses">...</span>';
+
+			for (let i = pageNo - 4; i <= pageNo - 1; i++) {
+				paginationHTML += getPageNumberHTML(i);
+			}
+
+		}
+
+		paginationHTML += '<span class="page-number page-number--current">' + pageNo + '</span>';
+
+		if ( pageLast - 6 <= pageNo && pageNo <= pageLast - 1 ) {
+
+			for (let i = pageNo + 1; i <= pageLast; i++) {
+				paginationHTML += getPageNumberHTML(i);
+			}
+
+		} else if ( pageNo <= pageLast - 7 ) {
+
+			for (let i = pageNo + 1; i <= pageNo + 4; i++) {
+				paginationHTML += getPageNumberHTML(i);
+			}
+
+			paginationHTML += '<span class="page-ellipses">...</span>';
+
+			paginationHTML += getPageNumberHTML(pageLast);
+
+		}
+
+		for (const paginationElement of data.paginationElements) {
+
+			paginationElement.innerHTML = paginationHTML;
+
+			// 
+			const pageNumberElements = paginationElement.querySelectorAll('[data-page-no]');
+
+			for (const pageNumberElement of pageNumberElements) {
+				const i = pageNumberElement.dataset.pageNo;
+				// TODO: ポインタイベントの処理をより厳密に。外から D&D してきたときに誤反応する
+				pageNumberElement.addEventListener('pointerup', () => { updateFilteredResult(i - 1); });
+			}
+
+		}
+
 	};
+
+	const getPageNumberHTML = pageNo => '<span class="page-number" data-page-no="' + pageNo + '">' + pageNo + '</span>';
 
 	const escapeHTML = html => html.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 

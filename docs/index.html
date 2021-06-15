@@ -26,10 +26,14 @@
       <br>
       3. 保存したスコアデータ (JSON 形式) を開いて表示します。
     </div>
-    <div>
+    <div role="application">
       <input type="file" accept="application/json" name="file" id="file">
       <div id="totalTables" class="total-tables"></div>
-      <div id="results"></div>
+      <div class="results-wrapper">
+        <nav id="paginationHeader"></nav>
+        <div id="results" class="results"></div>
+        <nav id="paginationFooter"></nav>
+      </div>
     </div>
     <script src="main.js?2021061401"></script>
   </body>

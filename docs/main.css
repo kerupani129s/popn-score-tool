@@ -82,3 +82,34 @@ img {
 .total-table--selected-column-4 th:nth-child(5) {
 	background-color: #f0f8ff;
 }
+
+.results-wrapper {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.results-table {
+	margin: 10px;
+}
+
+.results-table td, .results-table th {
+	border: 1px #fff solid;
+}
+
+.page-number {
+	display: inline-block;
+	padding-left: 8px;
+	padding-right: 8px;
+	border: 1px #e4e4e4 solid;
+}
+
+.page-number--current {
+	background-color: #f6f6f6;
+}
+
+.page-ellipses {
+	display: inline-block;
+	padding-left: 8px;
+	padding-right: 8px;
+}
