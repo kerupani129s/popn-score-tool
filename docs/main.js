@@ -2,8 +2,8 @@
 
 	// 定数
 	const resultsLimit   = 20;
-	const pagesLimit     = 9;
-	const pagesLimitHalf = Math.floor(pagesLimit / 2);
+	const pagesLimitHalf = 4;
+	const pagesLimit     = pagesLimitHalf * 2 + 1;
 
 	const types = ['easy', 'normal', 'hyper', 'ex'];
 
@@ -306,38 +306,24 @@
 
 		} else {
 
-			if ( pagesLimitHalf + 2 <= pageNo ) {
+			const pageCenter = Math.min(pageLast - pagesLimitHalf, Math.max(pagesLimitHalf + 1, pageNo));
+
+			if ( pagesLimitHalf + 2 <= pageCenter ) {
 
 				paginationHTML += getPageNumberHTML(1);
 
-				if ( pagesLimitHalf + 3 <= pageNo )
+				if ( pagesLimitHalf + 3 <= pageCenter )
 					paginationHTML += '<span class="page-ellipses">...</span>';
 
 			}
 
-			if ( pageNo <= pagesLimitHalf ) {
-
-				for (let p = 1; p <= pagesLimit; p++) {
-					paginationHTML += getPageNumberHTML(p, pageNo === p);
-				}
-
-			} else if ( pageLast - pagesLimitHalf <= pageNo ) {
-
-				for (let p = pageLast - pagesLimit + 1; p <=  pageLast; p++) {
-					paginationHTML += getPageNumberHTML(p, pageNo === p);
-				}
-
-			} else {
-
-				for (let p = pageNo - pagesLimitHalf; p <=  pageNo + pagesLimitHalf; p++) {
-					paginationHTML += getPageNumberHTML(p, pageNo === p);
-				}
-
+			for (let p = pageCenter - pagesLimitHalf; p <=  pageCenter + pagesLimitHalf; p++) {
+				paginationHTML += getPageNumberHTML(p, pageNo === p);
 			}
 
-			if ( pageNo <= pageLast - pagesLimitHalf - 1 ) {
+			if ( pageCenter <= pageLast - pagesLimitHalf - 1 ) {
 
-				if ( pageNo <= pageLast - pagesLimitHalf - 2 )
+				if ( pageCenter <= pageLast - pagesLimitHalf - 2 )
 					paginationHTML += '<span class="page-ellipses">...</span>';
 
 				paginationHTML += getPageNumberHTML(pageLast);
