@@ -1,4 +1,6 @@
-/* 全般 */
+/* 
+ * 全般
+ */
 table {
 	border-collapse: separate;
 	border-spacing: 0;
@@ -8,7 +10,9 @@ img {
 	vertical-align: top;
 }
 
-/* シンタックスハイライト */
+/* 
+ * シンタックスハイライト
+ */
 .code {
 	font-family: monospace;
 	margin: 2px;
@@ -29,7 +33,10 @@ img {
 	color: #777700;
 }
 
-/* テーブル */
+/* 
+ * アプリケーション
+ */
+/* アプリケーション > トータル表 */
 .total-tables {
 	display: flex;
 	flex-wrap: wrap;
@@ -83,6 +90,7 @@ img {
 	background-color: #f0f8ff;
 }
 
+/* アプリケーション > リザルト一覧 */
 .results-wrapper {
 	display: flex;
 	flex-direction: column;
@@ -101,7 +109,7 @@ img {
 	display: inline-block;
 	padding-left: 8px;
 	padding-right: 8px;
-	border: 1px #e4e4e4 solid;
+	border: 1px #e0e0e0 solid;
 }
 
 .page-number--current {
@@ -112,4 +120,13 @@ img {
 	display: inline-block;
 	padding-left: 8px;
 	padding-right: 8px;
+}
+
+.results-empty {
+	height: 64px;
+	padding-left: 16px;
+	padding-right: 16px;
+	border: 1px #e0e0e0 solid;
+	line-height: 64px;
+	text-align: center;
 }

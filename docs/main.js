@@ -280,7 +280,42 @@
 
 		const selectedResults = filteredResults.slice(offset, offset + resultsLimit);
 
-		const tableRanksHTML = '<table class="results-table" id="resultsTable">' +
+		data.resultsElement.innerHTML = getSelectedResultsHTML(selectedResults);
+
+		// ページネーション
+		const pageNo   = pageIndex + 1;
+		const pageLast = Math.ceil(filteredResults.length / resultsLimit);
+
+		const paginationHTML = pageLast !== 0 ? getPaginationHTML(pageNo, pageLast) : '';
+
+		for (const paginationElement of data.paginationElements) {
+
+			paginationElement.innerHTML = paginationHTML;
+
+			// 
+			if ( 2 <= pageLast ) {
+
+				const pageNumberElements = paginationElement.querySelectorAll('[data-page-no]');
+
+				for (const pageNumberElement of pageNumberElements) {
+					const i = pageNumberElement.dataset.pageNo;
+					// TODO: ポインタイベントの処理をより厳密に。外から D&D してきたときに誤反応する
+					pageNumberElement.addEventListener('pointerup', () => { updateFilteredResult(i - 1); });
+				}
+
+			}
+
+		}
+
+	};
+
+	const getSelectedResultsHTML = selectedResults => {
+
+		if ( selectedResults.length === 0 ) {
+			return '<div class="results-empty">条件に一致する楽曲はありません。</div>';
+		}
+
+		return '<table class="results-table" id="resultsTable">' +
 			'<thead><tr>' +
 			'<th>ジャンル名</th><th>曲名</th><th>タイプ</th><th>メダル</th><th>ランク</th><th>スコア</th>' +
 			'</tr></thead>' +
@@ -289,12 +324,9 @@
 			'</tbody>' +
 			'</table>';
 
-		data.resultsElement.innerHTML = tableRanksHTML;
+	};
 
-		// ページネーション
-		const pageLast = Math.ceil(filteredResults.length / resultsLimit) || 1; // メモ: 0 ならば 1 に置き換え
-
-		const pageNo = pageIndex + 1;
+	const getPaginationHTML = (pageNo, pageLast) => {
 
 		let paginationHTML = '';
 
@@ -332,20 +364,7 @@
 
 		}
 
-		for (const paginationElement of data.paginationElements) {
-
-			paginationElement.innerHTML = paginationHTML;
-
-			// 
-			const pageNumberElements = paginationElement.querySelectorAll('[data-page-no]');
-
-			for (const pageNumberElement of pageNumberElements) {
-				const i = pageNumberElement.dataset.pageNo;
-				// TODO: ポインタイベントの処理をより厳密に。外から D&D してきたときに誤反応する
-				pageNumberElement.addEventListener('pointerup', () => { updateFilteredResult(i - 1); });
-			}
-
-		}
+		return paginationHTML;
 
 	};
 
