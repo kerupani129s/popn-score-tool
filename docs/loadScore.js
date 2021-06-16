@@ -231,21 +231,48 @@
 
 			const array = await loadScoreOfInitial(initials[0]);
 
+			// 結果保存
+			if ( array.length === 0 ) {
+				document.body.insertAdjacentHTML('beforeend', '取得失敗<br>');
+				return;
+			}
+
 			document.body.insertAdjacentHTML('beforeend', '取得終了 (' + array.length + ' 曲)<br>');
 			const json = JSON.stringify(array, null, '    ');
 			showSaveFileDialog(json, 'score.json', 'application/json')
 
 		} else { // 本番
 
-			const promises = initials.map(initial => loadScoreOfInitial(initial));
+			const arrayRaw = [];
 
-			const arrays = await Promise.all(promises);
+			for (let i = 0; i < initials.length; i++) {
 
-			const array = arrays
-				.reduce((accumulator, currentValue) => accumulator.concat(currentValue)) // Promise.all() の結果をまとめる
-				.filter((x, i, a) => a.findIndex(x2 => x.id === x2.id) === i); // 重複削除
+				const initial = initials[i];
+
+				const arrayCurrent = await loadScoreOfInitial(initial);
+
+				// メモ: concat() は新しい配列のインスタンスを生成し、push() は引数展開をすると引数個数上限に
+				//       達する可能性ああるため、ここでは単純に for 文で要素を追加する
+				for (const row of arrayCurrent) {
+					arrayRaw.push(row);
+				}
+
+				// 進行状況の目安表示 (均一に進行するわけでない)
+				document.body.insertAdjacentHTML('beforeend', '' + (i + 1) + ' / ' + initials.length + '<br>');
+
+				const element = document.documentElement;
+				window.scroll(0, element.scrollHeight - element.clientHeight);
+
+			}
+
+			const array = arrayRaw.filter((x, i, a) => a.findIndex(x2 => x.id === x2.id) === i); // 重複削除
 
 			// 結果保存
+			if ( array.length === 0 ) {
+				document.body.insertAdjacentHTML('beforeend', '取得失敗<br>');
+				return;
+			}
+
 			document.body.insertAdjacentHTML('beforeend', '取得終了 (' + array.length + ' 曲)<br>');
 			const json = JSON.stringify(array, null, '    ');
 			showSaveFileDialog(json, 'score.json', 'application/json');
