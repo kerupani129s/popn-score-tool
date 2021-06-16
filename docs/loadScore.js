@@ -57,7 +57,7 @@
 		'O', 'P', 'Q', 'R', 'S', 'T', 'U',
 		'V', 'W', 'X', 'Y', 'Z',
 		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-		'@', '*'
+		'*', '@'
 	];
 
 	/**
@@ -143,7 +143,7 @@
 		// 
 		const row = {
 			'genre': music_genre, 'title': music_title, 'id': music_id,
-			'score': {
+			'results': {
 				'easy'  : {'medal': medal_easy  , 'rank': rank_easy  , 'score': score_easy  },
 				'normal': {'medal': medal_normal, 'rank': rank_normal, 'score': score_normal},
 				'hyper' : {'medal': medal_hyper , 'rank': rank_hyper , 'score': score_hyper },

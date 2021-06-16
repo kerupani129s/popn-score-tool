@@ -69,7 +69,7 @@
 			};
 
 			// リザルト情報
-			const resultsByType = musicResult.score;
+			const resultsByType = musicResult.results || musicResult.score; // メモ: ツール旧バージョン互換性対策
 
 			for (const type of types) {
 
