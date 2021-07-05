@@ -312,7 +312,7 @@
 	const getSelectedResultsHTML = selectedResults => {
 
 		if ( selectedResults.length === 0 ) {
-			return '<div class="results-empty">条件に一致する楽曲はありません。</div>';
+			return '<div class="results-empty">条件に一致するデータはありません。</div>';
 		}
 
 		return '<table class="results-table" id="resultsTable">' +
