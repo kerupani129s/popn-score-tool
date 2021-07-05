@@ -109,11 +109,12 @@ img {
 	display: inline-block;
 	padding-left: 8px;
 	padding-right: 8px;
-	border: 1px #e0e0e0 solid;
+	border: 1px #d0d0d0 solid;
+	background-color: #f6f6f6;
 }
 
 .page-number--current {
-	background-color: #f6f6f6;
+	background-color: #fff;
 }
 
 .page-ellipses {
