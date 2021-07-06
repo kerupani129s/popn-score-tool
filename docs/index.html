@@ -1,32 +1,41 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
   <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="referrer" content="no-referrer">
     <title>ポップンスコアツール</title>
-    <link rel="stylesheet" href="main.css?2019031902">
-    <script src="ifie.js"></script>
-    <script src="main.js?2019031902"></script>
+    <link rel="stylesheet" href="main.css?2021061401">
   </head>
   <body>
-    使用は自己責任でお願いします。<br>
-    <br>
-    1. <a href="javascript:(()=>{const s=document.createElement('script');s.src='https://kerupani129s.github.io/popn-score-tool/bookmarklet.js';document.head.appendChild(s);})();">ブックマークレット</a> をブックマークに登録します。<br>
-    (PC ではリンクをブックマークバーまでドラッグ＆ドロップすると便利です。)<br>
-    コピー＆ペースト用：
-    <div class="code">
-      <span class="comment">javascript:</span>(()=&gt;{<span class="statement">const</span> s=<span class="statement">document</span>.createElement(<span class="constant">'script'</span>);s.src=<span class="constant">'https://kerupani129s.github.io/popn-score-tool/bookmarklet.js'</span>;<span class="statement">document</span>.head.appendChild(s);})();
+    <div>
+      使用は自己責任でお願いします。<br>
+      <br>
+      1. <a href="javascript:(()=>{const s=document.createElement('script');s.src='https://kerupani129s.github.io/popn-score-tool/bookmarklet.js';document.head.appendChild(s);})();">ブックマークレット</a> をブックマークに登録します。<br>
+      (PC ではリンクをブックマークバーまでドラッグ＆ドロップすると便利です。)<br>
+      コピー＆ペースト用：
+      <div class="code">
+        <span class="code--comment">javascript:</span>(()=&gt;{<span class="code--statement">const</span> s=<span class="code--statement">document</span>.createElement(<span class="code--constant">'script'</span>);s.src=<span class="code--constant">'https://kerupani129s.github.io/popn-score-tool/bookmarklet.js'</span>;<span class="code--statement">document</span>.head.appendChild(s);})();
+      </div>
+      <br>
+      2. https://p.eagate.573.jp/ 上でブックマークレットを実行します。<br>
+      ログイン状態かつ e-amusement 有料サービスに加入している必要があります。<br>
+      成功するとスコアデータ (JSON 形式) の保存ダイアログが表示されます。<br>
+      (サーバーに負荷がかかるので、続けて何度も実行しないでください。)<br>
+      (スマートフォンやブラウザによって起動方法が異なる場合があります。)<br>
+      <br>
+      3. 保存したスコアデータ (JSON 形式) を開いて表示します。<br>
+      ※本ツールの現バージョンでは UPPER 表記は付きません。
     </div>
-    <br>
-    2. https://p.eagate.573.jp/ 上でブックマークレットを実行します。<br>
-    ログイン状態かつ e-amusement 有料サービスに加入している必要があります。<br>
-    成功するとスコアデータ (JSON 形式) の保存ダイアログが表示されます。<br>
-    (サーバーに負荷がかかるので、続けて何度も実行しないでください。)<br>
-    (スマートフォンやブラウザによって起動方法が異なる場合があります。)<br>
-    <br>
-    3. 保存したスコアデータ (JSON 形式) を開いて表示します。<br>
-    <input type="file" accept="application/json" name="file" id="file">
-    <div id="result"></div>
+    <div role="application">
+      <input type="file" accept="application/json" name="file" id="file">
+      <div id="totalTables" class="total-tables"></div>
+      <div class="results-wrapper">
+        <nav id="paginationHeader"></nav>
+        <div id="results" class="results"></div>
+        <nav id="paginationFooter"></nav>
+      </div>
+    </div>
+    <script src="main.js?2021061401"></script>
   </body>
 </html>

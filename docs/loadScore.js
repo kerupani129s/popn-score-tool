@@ -57,7 +57,7 @@
 		'O', 'P', 'Q', 'R', 'S', 'T', 'U',
 		'V', 'W', 'X', 'Y', 'Z',
 		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-		'@', '*'
+		'*', '@'
 	];
 
 	/**
@@ -67,6 +67,7 @@
 		return new Promise(resolve => {
 			const reader = new FileReader();
 			reader.onload = () => { resolve(reader.result) };
+			reader.onerror = () => { reader.abort(); reject(reader.error); };
 			reader.readAsText(blob, 'shift-jis');
 		});
 	};
@@ -142,7 +143,7 @@
 		// 
 		const row = {
 			'genre': music_genre, 'title': music_title, 'id': music_id,
-			'score': {
+			'results': {
 				'easy'  : {'medal': medal_easy  , 'rank': rank_easy  , 'score': score_easy  },
 				'normal': {'medal': medal_normal, 'rank': rank_normal, 'score': score_normal},
 				'hyper' : {'medal': medal_hyper , 'rank': rank_hyper , 'score': score_hyper },
@@ -230,21 +231,48 @@
 
 			const array = await loadScoreOfInitial(initials[0]);
 
+			// 結果保存
+			if ( array.length === 0 ) {
+				document.body.insertAdjacentHTML('beforeend', '取得失敗<br>');
+				return;
+			}
+
 			document.body.insertAdjacentHTML('beforeend', '取得終了 (' + array.length + ' 曲)<br>');
 			const json = JSON.stringify(array, null, '    ');
 			showSaveFileDialog(json, 'score.json', 'application/json')
 
 		} else { // 本番
 
-			const promises = initials.map(initial => loadScoreOfInitial(initial));
+			const arrayRaw = [];
 
-			const arrays = await Promise.all(promises);
+			for (let i = 0; i < initials.length; i++) {
 
-			const array = arrays
-				.reduce((accumulator, currentValue) => accumulator.concat(currentValue)) // Promise.all() の結果をまとめる
-				.filter((x, i, a) => a.findIndex(x2 => x.id === x2.id) === i); // 重複削除
+				const initial = initials[i];
+
+				const arrayCurrent = await loadScoreOfInitial(initial);
+
+				// メモ: concat() は新しい配列のインスタンスを生成し、push() は引数展開をすると引数個数上限に
+				//       達する可能性ああるため、ここでは単純に for 文で要素を追加する
+				for (const row of arrayCurrent) {
+					arrayRaw.push(row);
+				}
+
+				// 進行状況の目安表示 (均一に進行するわけでない)
+				document.body.insertAdjacentHTML('beforeend', '' + (i + 1) + ' / ' + initials.length + '<br>');
+
+				const element = document.documentElement;
+				window.scroll(0, element.scrollHeight - element.clientHeight);
+
+			}
+
+			const array = arrayRaw.filter((x, i, a) => a.findIndex(x2 => x.id === x2.id) === i); // 重複削除
 
 			// 結果保存
+			if ( array.length === 0 ) {
+				document.body.insertAdjacentHTML('beforeend', '取得失敗<br>');
+				return;
+			}
+
 			document.body.insertAdjacentHTML('beforeend', '取得終了 (' + array.length + ' 曲)<br>');
 			const json = JSON.stringify(array, null, '    ');
 			showSaveFileDialog(json, 'score.json', 'application/json');
