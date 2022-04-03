@@ -180,6 +180,7 @@
 		// 頭文字リスト
 		// 
 		// 日本語は Shift-JIS の半角カタカナを URL エンコードしたもの
+		// ASCII 文字に含まれない記号は Shift-JIS で URL エンコードしたもの
 		const INITIALS = [
 			'%B1', '%B2', '%B3', '%B4', '%B5',
 			'%B6', '%B7', '%B8', '%B9', '%BA',
@@ -196,7 +197,7 @@
 			'O', 'P', 'Q', 'R', 'S', 'T', 'U',
 			'V', 'W', 'X', 'Y', 'Z',
 			'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-			'*', '@',
+			'*', '@', '%81u', '%81%AA', // メモ: 公式サイトから閲覧不可な記号
 		];
 
 		document.body.innerHTML = '<div style="padding: 12px; font-size: 16px; line-height: 1.5; background-color: #fff; color: #000;">' +
