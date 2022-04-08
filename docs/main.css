@@ -1,24 +1,108 @@
-/* 
- * 全般
+/**
+ * サイト
  */
-table {
-	border-collapse: separate;
-	border-spacing: 0;
+body {
+	margin: 0;
+	font-family: sans-serif;
+	line-height: 1.5;
+	color: #282828;
 }
 
 img {
-	vertical-align: top;
+	vertical-align: middle;
 }
 
-/* 
+a {
+	text-decoration: none;
+}
+
+a[href]:hover {
+	text-decoration: underline;
+}
+
+input {
+	font: inherit;
+}
+
+.site-header {
+	display: flex;
+	box-sizing: content-box;
+	border-bottom: 1px solid gainsboro;
+	white-space: nowrap;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	background-color: #fff;
+}
+
+.site-title {
+	margin: 0 12px;
+}
+
+.site-title > a {
+	display: inline-block;
+	text-align: center;
+}
+
+.site-main {
+	padding-bottom: 8px;
+}
+
+@media (min-width: 768px) {
+	.site-header {
+		height: 64px;
+	}
+
+	.site-title {
+		font-size: 22px;
+		line-height: 32px;
+	}
+
+	.site-main {
+		padding-top: 65px;
+	}
+}
+
+@media (max-width: 767px) {
+	.site-header {
+		height: 48px;
+	}
+
+	.site-title {
+		font-size: 16px;
+		line-height: 24px;
+	}
+
+	.site-main {
+		padding-top: 49px;
+	}
+}
+
+.site-main h1,
+.site-main h2,
+.site-main h3,
+.site-main h4,
+.site-main h5,
+.site-main h6 {
+	margin-left: 12px;
+	margin-right: 12px;
+}
+
+.site-main p {
+	padding: 0 12px;
+}
+
+.site-main pre {
+	padding: 0 12px;
+}
+
+/**
  * シンタックスハイライト
  */
 .code {
-	font-family: monospace;
-	margin: 2px;
-	padding: 5px;
-	background-color: #fafafa;
+	white-space: pre-wrap;
 	word-break: break-all;
+	background-color: #fafafa;
 }
 
 .code--comment {
@@ -33,10 +117,24 @@ img {
 	color: #777700;
 }
 
-/* 
+/**
  * アプリケーション
  */
-/* アプリケーション > トータル表 */
+/**
+ * アプリケーション > 全般
+ */
+.file {
+	width: 100%;
+}
+
+table {
+	border-collapse: separate;
+	border-spacing: 0;
+}
+
+/**
+ * アプリケーション > トータル表
+ */
 .total-tables {
 	display: flex;
 	flex-wrap: wrap;
@@ -90,7 +188,9 @@ img {
 	background-color: #f0f8ff;
 }
 
-/* アプリケーション > リザルト一覧 */
+/**
+ * アプリケーション > リザルト一覧
+ */
 .results-wrapper {
 	display: flex;
 	flex-direction: column;
