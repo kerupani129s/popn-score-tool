@@ -189,7 +189,7 @@
 					paginationHTML += getPageNumberHTML(1);
 
 					if ( pagesLimitHalf + 3 <= pageCenter )
-						paginationHTML += '<span class="page-ellipses">...</span>';
+						paginationHTML += '<span class="page-ellipsis">...</span>';
 
 				}
 
@@ -200,7 +200,7 @@
 				if ( pageCenter <= pageLast - pagesLimitHalf - 1 ) {
 
 					if ( pageCenter <= pageLast - pagesLimitHalf - 2 )
-						paginationHTML += '<span class="page-ellipses">...</span>';
+						paginationHTML += '<span class="page-ellipsis">...</span>';
 
 					paginationHTML += getPageNumberHTML(pageLast);
 
