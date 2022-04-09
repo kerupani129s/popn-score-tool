@@ -30,23 +30,23 @@
 	const filterResults = (() => {
 
 		const resultsElement = document.getElementById('results');
-		const paginationElements = ['paginationHeader', 'paginationFooter'].map(id => document.getElementById(id));
+		const paginationElements = ['pagination-header', 'pagination-footer'].map(id => document.getElementById(id));
 
 		const filterResults = (tableElement, row, column, results) => {
 
 			// 
 			const id = tableElement.id;
 
-			if ( ! ['medalsTable', 'ranksTable'].includes(id) ) return;
+			if ( ! ['medals-table', 'ranks-table'].includes(id) ) return;
 
-			const rowMax = ('medalsTable' === id ? medals.length : ranks.length) + 1; // + 2 - 1 = + 1
+			const rowMax = ('medals-table' === id ? medals.length : ranks.length) + 1; // + 2 - 1 = + 1
 			const rowInner = (0 === row || row === rowMax) ? null : row - 1;
 
 			const columnMax = types.length + 1; // + 2 - 1 = + 1
 			const columnInner = (0 === column || column === columnMax) ? null : column - 1;
 
 			// 
-			const filteredResults = 'medalsTable' === id ? filterMedals(rowInner, columnInner, results) : filterRanks(rowInner, columnInner, results);
+			const filteredResults = 'medals-table' === id ? filterMedals(rowInner, columnInner, results) : filterRanks(rowInner, columnInner, results);
 
 			updateTotalTable(tableElement, row, column, rowInner === null, columnInner === null); // メモ: 否定演算子 ! にしてしまうと 0 も true になってしまう
 			updateFilteredResult(filteredResults);
@@ -159,7 +159,7 @@
 				return '<div class="results-empty">条件に一致するデータはありません。</div>';
 			}
 
-			return '<table class="results-table" id="resultsTable">' +
+			return '<table id="results-table" class="results-table">' +
 				'<thead><tr>' +
 				'<th>ジャンル名</th><th>曲名</th><th>タイプ</th><th>メダル</th><th>ランク</th><th>スコア</th>' +
 				'</tr></thead>' +
@@ -223,7 +223,7 @@
 	// 
 	const convert = (() => {
 
-		const totalTablesElement = document.getElementById('totalTables');
+		const totalTablesElement = document.getElementById('total-tables');
 
 		const readAsText = file => new Promise((resolve, reject) => {
 			const reader = new FileReader();
@@ -276,15 +276,15 @@
 			totalTablesElement.innerHTML = getTotalTablesHTML(results);
 
 			// 
-			const medalsTableElement = document.getElementById('medalsTable');
-			const ranksTableElement  = document.getElementById('ranksTable');
+			const medalsTableElement = document.getElementById('medals-table');
+			const ranksTableElement  = document.getElementById('ranks-table');
 
 			// TODO: ポインタイベントの処理をより厳密に。外から D&D してきたときに誤反応する
 			medalsTableElement.addEventListener('pointerup', event => filterResultsOnEvent(event, results));
 			ranksTableElement.addEventListener('pointerup', event => filterResultsOnEvent(event, results));
 
 			// 
-			filterResults(medalsTable, 0, 0, results);
+			filterResults(medalsTableElement, 0, 0, results);
 
 		};
 
@@ -297,7 +297,7 @@
 			const tableRanks = ranks.map(rank => types.map(type => countOfRanks(rank, type)));
 
 			// 表示
-			const tableMedalsHTML = '<table class="total-table medals-table" id="medalsTable">' +
+			const tableMedalsHTML = '<table id="medals-table" class="total-table medals-table">' +
 				'<thead><tr>' +
 				'<th></th>' + types.map(type => '<th>' + type.toUpperCase() + '</th>').join('') + '<th>合計</th>' +
 				'</tr></thead>' +
@@ -307,7 +307,7 @@
 				'</tbody>' +
 				'</table>';
 
-			const tableRanksHTML = '<table class="total-table ranks-table" id="ranksTable">' +
+			const tableRanksHTML = '<table id="ranks-table" class="total-table ranks-table">' +
 				'<thead><tr>' +
 				'<th></th>' + types.map(type => '<th>' + type.toUpperCase() + '</th>').join('') + '<th>合計</th>' +
 				'</tr></thead>' +
