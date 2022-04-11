@@ -214,7 +214,10 @@
 
 		const getPageNumberHTML = (pageNo, isCurrentPage = false) => (isCurrentPage ? '<span class="page-number page-number--current">' + pageNo + '</span>' : '<span class="page-number" data-page-no="' + pageNo + '">' + pageNo + '</span>');
 
-		const escapeHTML = html => html.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
+		const escapeHTML = html => html
+			.replaceAll('&', '&amp;')
+			.replaceAll('<', '&lt;').replaceAll('>', '&gt;')
+			.replaceAll('"', '&quot;').replaceAll('\'', '&#39;');
 
 		return filterResults;
 
