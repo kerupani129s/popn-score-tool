@@ -25,7 +25,7 @@
 	];
 
 	// 
-	const getMedalImageURL = name => 'https://eacache.s.konaminet.jp/game/popn/riddles/images/p/common/medal/' + name;
+	const getMedalImageURL = name => './images/medal/svg/' + name.replace('.png', '.svg');
 
 	const filterResults = (() => {
 
