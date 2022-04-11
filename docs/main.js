@@ -14,14 +14,14 @@
 		'meda_e.png', 'meda_f.png', 'meda_g.png',
 		'meda_k.png', // メモ: イージークリアの順番注意
 		'meda_h.png', 'meda_i.png', 'meda_j.png',
-		// 'meda_none.png'
+		// 'meda_none.png',
 	];
 
 	const ranks = [
 		'rank_s.png',
 		'rank_a3.png', 'rank_a2.png', 'rank_a1.png',
 		'rank_b.png', 'rank_c.png', 'rank_d.png', 'rank_e.png',
-		// 'rank_none.png'
+		// 'rank_none.png',
 	];
 
 	// 
