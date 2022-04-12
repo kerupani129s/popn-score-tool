@@ -143,8 +143,7 @@
 					const pageNumberElements = paginationElement.querySelectorAll('[data-page-no]');
 
 					for (const pageNumberElement of pageNumberElements) {
-						// TODO: ポインタイベントの処理をより厳密に。外から D&D してきたときに誤反応する
-						pageNumberElement.addEventListener('pointerup', event => updateFilteredResultOnEvent(event, filteredResults));
+						pageNumberElement.addEventListener('click', event => updateFilteredResultOnEvent(event, filteredResults));
 					}
 
 				}
@@ -282,9 +281,8 @@
 			const medalsTableElement = document.getElementById('medals-table');
 			const ranksTableElement  = document.getElementById('ranks-table');
 
-			// TODO: ポインタイベントの処理をより厳密に。外から D&D してきたときに誤反応する
-			medalsTableElement.addEventListener('pointerup', event => filterResultsOnEvent(event, results));
-			ranksTableElement.addEventListener('pointerup', event => filterResultsOnEvent(event, results));
+			medalsTableElement.addEventListener('click', event => filterResultsOnEvent(event, results));
+			ranksTableElement.addEventListener('click', event => filterResultsOnEvent(event, results));
 
 			// 
 			filterResults(medalsTableElement, 0, 0, results);
