@@ -367,15 +367,23 @@
 		const inputFileElement = document.getElementById('file');
 
 		const convertOnEvent = async file => {
+
+			inputFileElement.disabled = true;
+
 			await convert(file);
+
+			inputFileElement.disabled = false;
+
 		};
 
 		// 
 		inputFileElement.addEventListener('change', event => {
 			const files = event.target.files;
 			if ( files.length !== 1 ) return;
-			convertOnEvent(files[0]);
+			convertOnEvent(files[0]); // メモ: await していないため注意
 		});
+
+		inputFileElement.disabled = false;
 
 	})();
 
