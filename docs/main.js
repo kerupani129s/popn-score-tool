@@ -25,7 +25,7 @@
 	];
 
 	// 
-	const getMedalImageURL = name => './images/medal/svg/' + name.replace('.png', '.svg');
+	const getMedalImageURL = name => './images/medal/svg/' + name.replace('.png', '.svg') + '?v0.1.0';
 
 	const filterResults = (() => {
 
