@@ -234,16 +234,14 @@
 			reader.readAsText(file);
 		});
 
-		const convert = async file => {
+		// 
+		const getResults = playData => {
 
-			// 初期化
-			const results = [];
-
-			// 
-			const text = await readAsText(file);
-			const musicResults = JSON.parse(text);
+			const musicResults = playData; // メモ: 今後、仕様変更する可能性あり
 
 			// スコアデータを楽曲単位から楽曲情報と譜面単位リザルト情報に分割
+			const results = [];
+
 			for (const musicResult of musicResults) {
 
 				// 楽曲情報
@@ -274,18 +272,7 @@
 
 			}
 
-			// 
-			totalTablesElement.innerHTML = getTotalTablesHTML(results);
-
-			// 
-			const medalsTableElement = document.getElementById('medals-table');
-			const ranksTableElement  = document.getElementById('ranks-table');
-
-			medalsTableElement.addEventListener('click', event => filterResultsOnEvent(event, results));
-			ranksTableElement.addEventListener('click', event => filterResultsOnEvent(event, results));
-
-			// 
-			filterResults(medalsTableElement, 0, 0, results);
+			return results;
 
 		};
 
@@ -323,6 +310,23 @@
 		};
 
 		// 
+		/**
+		 * 自身または祖先からテーブルのセルの要素を取得
+		 * 
+		 * セル以外の要素の場合は undefined を返す
+		 */
+		const getClosestCellElement = (element, tableElement) => {
+
+			while ( ! /^td|th$/i.test(element.tagName) ) {
+				if ( element === tableElement ) return;
+				element = element.parentNode;
+				if ( ! element ) return;
+			}
+
+			return element;
+
+		};
+
 		const filterResultsOnEvent = (event, results) => {
 
 			const tableElement = event.currentTarget;
@@ -339,20 +343,33 @@
 
 		};
 
-		/**
-		 * 自身または祖先からテーブルのセルの要素を取得
-		 * 
-		 * セル以外の要素の場合は undefined を返す
-		 */
-		const getClosestCellElement = (element, tableElement) => {
+		const renderTotalTables = results => {
 
-			while ( ! /^td|th$/i.test(element.tagName) ) {
-				if ( element === tableElement ) return;
-				element = element.parentNode;
-				if ( ! element ) return;
-			}
+			// 
+			totalTablesElement.innerHTML = getTotalTablesHTML(results);
 
-			return element;
+			// 
+			const medalsTableElement = document.getElementById('medals-table');
+			const ranksTableElement  = document.getElementById('ranks-table');
+
+			medalsTableElement.addEventListener('click', event => filterResultsOnEvent(event, results));
+			ranksTableElement.addEventListener('click', event => filterResultsOnEvent(event, results));
+
+			// 
+			filterResults(medalsTableElement, 0, 0, results);
+
+		};
+
+		// 
+		const convert = async file => {
+
+			const text = await readAsText(file);
+			const playData = JSON.parse(text);
+
+			// 
+			const results = getResults(playData);
+
+			renderTotalTables(results);
 
 		};
 
