@@ -92,6 +92,11 @@ input {
 	padding: 0 12px;
 }
 
+.site-main ul {
+	padding-left: 40px;
+	padding-right: 12px;
+}
+
 .site-main pre {
 	padding: 0 12px;
 }
