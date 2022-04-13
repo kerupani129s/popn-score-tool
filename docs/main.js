@@ -25,6 +25,74 @@
 	];
 
 	// 
+	const getPlayDataFromFile = (() => {
+
+		const readAsText = file => new Promise((resolve, reject) => {
+			const reader = new FileReader();
+			reader.onload = () => resolve(reader.result);
+			reader.onerror = () => reject(reader.error);
+			reader.readAsText(file);
+		});
+
+		const getResults = rawPlayData => {
+
+			const musicResults = rawPlayData; // メモ: 今後、仕様変更する可能性あり
+
+			// スコアデータを楽曲単位から楽曲情報と譜面単位リザルト情報に分割
+			const results = [];
+
+			for (const musicResult of musicResults) {
+
+				// 楽曲情報
+				const music = {
+					id: musicResult.id,
+					genre: musicResult.genre,
+					title: musicResult.title
+				};
+
+				// リザルト情報
+				const resultsByType = musicResult.results || musicResult.score; // メモ: ツール旧バージョン互換性対策
+
+				for (const type of types) {
+
+					const resultByType = resultsByType[type];
+
+					const result = {
+						music,
+						type,
+						medal: resultByType.medal,
+						rank: resultByType.rank,
+						score: resultByType.score
+					};
+
+					results.push(result);
+
+				}
+
+			}
+
+			return results;
+
+		};
+
+		const getPlayDataFromFile = async file => {
+
+			const text = await readAsText(file);
+			const rawPlayData = JSON.parse(text);
+
+			const results = getResults(rawPlayData);
+
+			return {
+				results,
+			};
+
+		};
+
+		return getPlayDataFromFile;
+
+	})();
+
+	// 
 	const getMedalImageURL = name => './images/medal/svg/' + name.replace('.png', '.svg') + '?v0.1.0';
 
 	const filterResults = (() => {
@@ -222,59 +290,9 @@
 
 	})();
 
-	// 
-	const convert = (() => {
+	const renderTotalTables = (() => {
 
 		const totalTablesElement = document.getElementById('total-tables');
-
-		const readAsText = file => new Promise((resolve, reject) => {
-			const reader = new FileReader();
-			reader.onload = () => resolve(reader.result);
-			reader.onerror = () => reject(reader.error);
-			reader.readAsText(file);
-		});
-
-		// 
-		const getResults = playData => {
-
-			const musicResults = playData; // メモ: 今後、仕様変更する可能性あり
-
-			// スコアデータを楽曲単位から楽曲情報と譜面単位リザルト情報に分割
-			const results = [];
-
-			for (const musicResult of musicResults) {
-
-				// 楽曲情報
-				const music = {
-					id: musicResult.id,
-					genre: musicResult.genre,
-					title: musicResult.title
-				};
-
-				// リザルト情報
-				const resultsByType = musicResult.results || musicResult.score; // メモ: ツール旧バージョン互換性対策
-
-				for (const type of types) {
-
-					const resultByType = resultsByType[type];
-
-					const result = {
-						music,
-						type,
-						medal: resultByType.medal,
-						rank: resultByType.rank,
-						score: resultByType.score
-					};
-
-					results.push(result);
-
-				}
-
-			}
-
-			return results;
-
-		};
 
 		const getTotalTablesHTML = results => {
 
@@ -360,16 +378,18 @@
 
 		};
 
-		// 
+		return renderTotalTables;
+
+	})();
+
+	// 
+	const convert = (() => {
+
 		const convert = async file => {
 
-			const text = await readAsText(file);
-			const playData = JSON.parse(text);
+			const playData = await getPlayDataFromFile(file);
 
-			// 
-			const results = getResults(playData);
-
-			renderTotalTables(results);
+			renderTotalTables(playData.results);
 
 		};
 
