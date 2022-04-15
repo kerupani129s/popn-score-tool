@@ -294,36 +294,75 @@
 
 		const totalTablesElement = document.getElementById('total-tables');
 
-		const getTotalTablesHTML = results => {
+		const getMedalsTableHTML = results => {
 
 			const countOfMedals = (medal, type) => results.filter(r => r.type === type && r.medal === medal).length;
-			const tableMedals = medals.map(medal => types.map(type => countOfMedals(medal, type)));
+
+			const table = medals.map(medal => {
+				const row = types.map(type => countOfMedals(medal, type));
+				const rowTotal = row.reduce((sum, cell) => sum + cell);
+				row.push(rowTotal);
+				return row;
+			});
+
+			const columnTotal = table.reduce((sumRow, row) => sumRow.map((sumCell, i) => sumCell + row[i]));
+
+			// 
+			const columnHeaders = types.map(type => type.toUpperCase());
+			columnHeaders.unshift('');
+			columnHeaders.push('合計');
+
+			const rowHeaders = medals.map(medal => '<img src="' + getMedalImageURL(medal) + '">');
+
+			const rowHeaderOfColumnTotal = 'PLAYED';
+
+			// 
+			const id = 'medals-table';
+			const classNames = ['total-table', 'medals-table'];
+
+			const html = '<table id="' + id + '" class="' + classNames.join(' ') + '">' +
+				'<thead><tr>' + columnHeaders.map(cell => '<th>' + cell + '</th>').join('') + '</tr></thead>' +
+				'<tbody>' + table.map((row, i) => '<tr><th>' + rowHeaders[i] + '</th>' + row.map(cell => '<td>' + cell + '</td>').join('') + '</tr>').join('') + '</tbody>' +
+				'<tfoot><tr><th>' + rowHeaderOfColumnTotal + '</th>' + columnTotal.map(cell => '<td>' + cell + '</td>').join('') + '</tr></tfoot>' +
+				'</table>';
+
+			return html;
+
+		};
+
+		const getRanksTableHTML = results => {
 
 			const countOfRanks = (rank, type) => results.filter(r => r.type === type && r.rank === rank).length;
-			const tableRanks = ranks.map(rank => types.map(type => countOfRanks(rank, type)));
 
-			// 表示
-			const tableMedalsHTML = '<table id="medals-table" class="total-table medals-table">' +
-				'<thead><tr>' +
-				'<th></th>' + types.map(type => '<th>' + type.toUpperCase() + '</th>').join('') + '<th>合計</th>' +
-				'</tr></thead>' +
-				'<tbody>' +
-				tableMedals.map((row, i) => '<tr><th><img src="' + getMedalImageURL(medals[i]) + '"></th>' + row.map(cell => '<td>' + cell + '</td>').join('') + '<td>' + row.reduce((sum, cell) => sum + cell) + '</td></tr>').join('') +
-				'<tr><th>PLAYED</th>' + types.map((type, i) => '<td>' + tableMedals.reduce((sum, row) => sum + row[i], 0) + '</td>').join('') + '<td>' + tableMedals.reduce((sum, row) => sum + row.reduce((sum, cell) => sum + cell), 0) + '</td></tr>' +
-				'</tbody>' +
+			const table = ranks.map(rank => {
+				const row = types.map(type => countOfRanks(rank, type));
+				const rowTotal = row.reduce((sum, cell) => sum + cell);
+				row.push(rowTotal);
+				return row;
+			});
+
+			const columnTotal = table.reduce((sumRow, row) => sumRow.map((sumCell, i) => sumCell + row[i]));
+
+			// 
+			const columnHeaders = types.map(type => type.toUpperCase());
+			columnHeaders.unshift('');
+			columnHeaders.push('合計');
+
+			const rowHeaders = ranks.map(rank => '<img src="' + getMedalImageURL(rank) + '">');
+
+			const rowHeaderOfColumnTotal = 'RANKED';
+
+			// 
+			const id = 'ranks-table';
+			const classNames = ['total-table', 'ranks-table'];
+
+			const html = '<table id="' + id + '" class="' + classNames.join(' ') + '">' +
+				'<thead><tr>' + columnHeaders.map(cell => '<th>' + cell + '</th>').join('') + '</tr></thead>' +
+				'<tbody>' + table.map((row, i) => '<tr><th>' + rowHeaders[i] + '</th>' + row.map(cell => '<td>' + cell + '</td>').join('') + '</tr>').join('') + '</tbody>' +
+				'<tfoot><tr><th>' + rowHeaderOfColumnTotal + '</th>' + columnTotal.map(cell => '<td>' + cell + '</td>').join('') + '</tr></tfoot>' +
 				'</table>';
 
-			const tableRanksHTML = '<table id="ranks-table" class="total-table ranks-table">' +
-				'<thead><tr>' +
-				'<th></th>' + types.map(type => '<th>' + type.toUpperCase() + '</th>').join('') + '<th>合計</th>' +
-				'</tr></thead>' +
-				'<tbody>' +
-				tableRanks.map((row, i) => '<tr><th><img src="' + getMedalImageURL(ranks[i]) + '"></th>' + row.map(cell => '<td>' + cell + '</td>').join('') + '<td>' + row.reduce((sum, cell) => sum + cell) + '</td></tr>').join('') +
-				'<tr><th>RANKED</th>' + types.map((type, i) => '<td>' + tableRanks.reduce((sum, row) => sum + row[i], 0) + '</td>').join('') + '<td>' + tableRanks.reduce((sum, row) => sum + row.reduce((sum, cell) => sum + cell), 0) + '</td></tr>' +
-				'</tbody>' +
-				'</table>';
-
-			return tableMedalsHTML + tableRanksHTML;
+			return html;
 
 		};
 
@@ -364,7 +403,10 @@
 		const renderTotalTables = results => {
 
 			// 
-			totalTablesElement.innerHTML = getTotalTablesHTML(results);
+			totalTablesElement.innerHTML = '';
+
+			totalTablesElement.insertAdjacentHTML('beforeend', getMedalsTableHTML(results));
+			totalTablesElement.insertAdjacentHTML('beforeend', getRanksTableHTML(results));
 
 			// 
 			const medalsTableElement = document.getElementById('medals-table');
