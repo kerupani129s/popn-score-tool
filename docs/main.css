@@ -114,12 +114,16 @@ input {
 	color: #969696;
 }
 
+.code__constant {
+	color: #777700;
+}
+
 .code__statement {
 	color: #0000ff;
 }
 
-.code__constant {
-	color: #777700;
+.code__type {
+	color: #0000ff;
 }
 
 /**
