@@ -132,11 +132,6 @@ input {
 	width: 100%;
 }
 
-table {
-	border-collapse: separate;
-	border-spacing: 0;
-}
-
 /**
  * アプリケーション > トータル表
  */
@@ -149,6 +144,8 @@ table {
 
 .total-table {
 	margin: 10px;
+	border-collapse: separate;
+	border-spacing: 0;
 }
 
 .total-table td {
