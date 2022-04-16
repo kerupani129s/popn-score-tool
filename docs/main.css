@@ -110,15 +110,15 @@ input {
 	background-color: #fafafa;
 }
 
-.code--comment {
+.code__comment {
 	color: #969696;
 }
 
-.code--statement {
+.code__statement {
 	color: #0000ff;
 }
 
-.code--constant {
+.code__constant {
 	color: #777700;
 }
 
