@@ -169,8 +169,9 @@
 				tableElement.classList.add('total-table--selected-all');
 				tableElement.dataset.selected = 'all';
 			} else if ( isOuterRow ) {
-				tableElement.classList.add('total-table--selected-column-' + column);
-				tableElement.dataset.selected = 'column-' + column;
+				const columnElement = tableElement.getElementsByTagName('col')[column];
+				columnElement.classList.add('total-table--selected-column');
+				columnElement.dataset.selected = 'column';
 			} else if ( isOuterColumn ) {
 				const rowElement = tableElement.rows[row];
 				rowElement.classList.add('total-table--selected-row');
@@ -303,6 +304,10 @@
 
 			// 
 			const tableElement = document.createElement('table');
+
+			tableElement.innerHTML = '<colgroup>' +
+				'<col>'.repeat(columnHeaders.length) +
+				'</colgroup>';
 
 			// 
 			tableElement.createTHead().innerHTML = '<tr>' +
