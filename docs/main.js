@@ -435,11 +435,44 @@
 	// 
 	const convert = (() => {
 
+		const resultError = document.getElementById('result-error');
+		const resultOk = document.getElementById('result-ok');
+
+		// 
+		const showElement = element => {
+			element.classList.add('displayed');
+		};
+
+		const hideElement = element => {
+			element.classList.remove('displayed');
+		};
+
+		// 
+		const initElements = () => {
+			hideElement(resultError);
+			hideElement(resultOk);
+		};
+
+		const renderError = error => {
+			console.error(error);
+		};
+
 		const convert = async file => {
 
-			const playData = await getPlayDataFromFile(file);
+			initElements();
 
-			renderTotalTables(playData.results);
+			try {
+
+				const playData = await getPlayDataFromFile(file);
+
+				renderTotalTables(playData.results);
+
+				showElement(resultOk);
+
+			} catch (error) {
+				renderError(error);
+				showElement(resultError);
+			}
 
 		};
 

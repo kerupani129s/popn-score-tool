@@ -132,6 +132,15 @@ input {
 /**
  * アプリケーション > 全般
  */
+.togglable:not(.displayed) {
+	display: none;
+}
+
+.error {
+	font-weight: bold;
+	color: red;
+}
+
 .file {
 	width: 100%;
 }

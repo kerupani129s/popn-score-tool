@@ -55,11 +55,16 @@
         </p>
         <div role="application">
           <p><input type="file" id="file" accept=".json" class="file" disabled></p>
-          <div id="total-tables" class="total-tables"></div>
-          <div class="results-wrapper">
-            <nav id="pagination-header"></nav>
-            <div id="results" class="results"></div>
-            <nav id="pagination-footer"></nav>
+          <div id="result-error" class="togglable result-error">
+            <p class="error">エラー!</p>
+          </div>
+          <div id="result-ok" class="togglable result-ok">
+            <div id="total-tables" class="total-tables"></div>
+            <div class="results-wrapper">
+              <nav id="pagination-header"></nav>
+              <div id="results" class="results"></div>
+              <nav id="pagination-footer"></nav>
+            </div>
           </div>
         </div>
       </main>
