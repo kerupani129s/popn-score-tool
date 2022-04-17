@@ -7,7 +7,7 @@
  */
 (async () => {
 
-	const DEBUG = true;
+	const DEBUG = false;
 
 	// 
 	const WAIT_TIME_IN_MILLISECONDS = 100;
