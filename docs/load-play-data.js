@@ -1,3 +1,10 @@
+/*!
+ * ポップンスコアツール v0.1.0
+ *
+ * ポップンスコアツール is licensed under the MIT License.
+ * Copyright (c) 2019 ケルパニ＠猫
+ * https://github.com/kerupani129s/popn-score-tool/blob/master/LICENSE
+ */
 (async () => {
 
 	const DEBUG = true;
