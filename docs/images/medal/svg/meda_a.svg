@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 260 260">
+  <polygon points="130,20 170,80 239,99 195,156 198,228 130,203 62,228 65,156 21,99 90,80" style="paint-order: stroke;" fill="#fc0" stroke-width="20" stroke-linejoin="round" stroke="#444" />
+  <polygon points="130,20 170,80 130,135 239,99 195,156 130,135 198,228 130,203 130,135 62,228 65,156 130,135 21,99 90,80 130,135" fill="#ff8" />
+  <polygon points="130,55 200,125 130,195 60,125" fill="#fc0" />
+</svg>
