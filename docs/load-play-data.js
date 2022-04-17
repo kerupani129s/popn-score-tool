@@ -2,6 +2,9 @@
 
 	const DEBUG = true;
 
+	// 
+	const WAIT_TIME_IN_MILLISECONDS = 100;
+
 	const POPN_RESULTS_URL = 'https://p.eagate.573.jp/game/popn/riddles/playdata/mu_top.html';
 
 	// ウェブサイトを確認
@@ -134,9 +137,14 @@
 		};
 
 		// 
+		const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 		const loadResults = async (results, initial, page) => {
 
 			const url = POPN_RESULTS_URL + '?page=' + page + '&genre=' + initial;
+
+			// 
+			await delay(WAIT_TIME_IN_MILLISECONDS);
 
 			// 
 			const response = await fetch(url, { credentials: 'include' });
