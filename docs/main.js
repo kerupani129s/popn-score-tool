@@ -68,8 +68,8 @@
 				// 楽曲情報
 				const music = {
 					id: musicResult.id,
-					genre: musicResult.genre,
-					title: musicResult.title,
+					genre: musicResult.genre.trim(),
+					title: musicResult.title.trim(),
 				};
 
 				// リザルト情報
