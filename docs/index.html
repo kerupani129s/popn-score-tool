@@ -1,41 +1,75 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" prefix="og: https://ogp.me/ns#">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="referrer" content="no-referrer">
     <title>ポップンスコアツール</title>
-    <link rel="stylesheet" href="main.css?2021061401">
+    <link rel="stylesheet" href="main.css?v0.1.0">
+    <meta property="og:title" content="ポップンスコアツール">
+    <meta property="og:description" content="ポップンスコアツール">
+    <meta property="og:url" content="https://kerupani129s.github.io/popn-score-tool/">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary">
   </head>
   <body>
-    <div>
-      使用は自己責任でお願いします。<br>
-      <br>
-      1. <a href="javascript:(()=>{const s=document.createElement('script');s.src='https://kerupani129s.github.io/popn-score-tool/bookmarklet.js';document.head.appendChild(s);})();">ブックマークレット</a> をブックマークに登録します。<br>
-      (PC ではリンクをブックマークバーまでドラッグ＆ドロップすると便利です。)<br>
-      コピー＆ペースト用：
-      <div class="code">
-        <span class="code--comment">javascript:</span>(()=&gt;{<span class="code--statement">const</span> s=<span class="code--statement">document</span>.createElement(<span class="code--constant">'script'</span>);s.src=<span class="code--constant">'https://kerupani129s.github.io/popn-score-tool/bookmarklet.js'</span>;<span class="code--statement">document</span>.head.appendChild(s);})();
-      </div>
-      <br>
-      2. https://p.eagate.573.jp/ 上でブックマークレットを実行します。<br>
-      ログイン状態かつ e-amusement 有料サービスに加入している必要があります。<br>
-      成功するとスコアデータ (JSON 形式) の保存ダイアログが表示されます。<br>
-      (サーバーに負荷がかかるので、続けて何度も実行しないでください。)<br>
-      (スマートフォンやブラウザによって起動方法が異なる場合があります。)<br>
-      <br>
-      3. 保存したスコアデータ (JSON 形式) を開いて表示します。<br>
-      ※本ツールの現バージョンでは UPPER 表記は付きません。
+    <div class="site">
+      <header class="site-header">
+        <h1 class="site-title"><a href=".">ポップン<br>スコアツール</a></h1>
+      </header>
+      <main class="site-main">
+        <p>
+        ※使用は自己責任でお願いします。<br>
+        ※現バージョンではスマートフォン環境で表示が崩れることがあります。
+        </p>
+        <h2>機能</h2>
+        <ul>
+          <li>ポップンのスコアデータを保存 (JSON 形式)</li>
+          <li>保存したスコアデータ (JSON 形式) を閲覧</li>
+        </ul>
+        <h2>使い方</h2>
+        <p>
+        1. 「<a href="javascript:(d=>{const s=d.createElement('script');s.src='https://kerupani129s.github.io/popn-score-tool/bookmarklet.js?timestamp='+Date.now()+'ms';d.head.appendChild(s);})(document);">ポップンプレーデータ (JSON 形式) 保存 ブックマークレット</a>」をブックマークに登録します。
+        </p>
+        <p>
+        (PC では上記リンクをブックマークバーまでドラッグ＆ドロップすると便利です。)
+        </p>
+        <p>コピー＆ペースト用:</p>
+        <pre class="code"><span class="code__comment">javascript:</span>(d=&gt;{<span class="code__statement">const</span> s=d.createElement(<span class="code__constant">'script'</span>);s.src=<span class="code__constant">'https://kerupani129s.github.io/popn-score-tool/bookmarklet.js?timestamp='</span>+<span class="code__type">Date</span>.now()+<span class="code__constant">'ms'</span>;d.head.appendChild(s);})(<span class="code__statement">document</span>);</pre>
+        <p>
+        2. https://p.eagate.573.jp/ 上でブックマークレットを実行するとスコアデータの取得が開始されます。<br>
+        ログイン状態かつ e-amusement 有料サービスに加入している必要があります。<br>
+        取得に成功するとスコアデータ (JSON 形式) の保存が開始されます。
+        </p>
+        <p>
+        (サーバーに負荷がかかるので、続けて何度も実行しないでください。)<br>
+        (スマートフォンやブラウザによって起動方法が異なる場合があります。)
+        </p>
+        <h2>ビューア</h2>
+        <p>
+        保存したスコアデータ (JSON 形式) を開いて表示します。
+        </p>
+        <p>
+        ※本ツールでは未プレーのデータは表示されません。<br>
+        ※本ツールでは UPPER 表記は付きません。
+        </p>
+        <div role="application">
+          <p><input type="file" id="file" accept=".json" class="file" disabled></p>
+          <div id="result-error" class="togglable result-error">
+            <p class="error">エラー!</p>
+          </div>
+          <div id="result-ok" class="togglable result-ok">
+            <div id="total-tables" class="total-tables"></div>
+            <div class="results-wrapper">
+              <nav id="pagination-header"></nav>
+              <div id="results" class="results"></div>
+              <nav id="pagination-footer"></nav>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
-    <div role="application">
-      <input type="file" accept="application/json" name="file" id="file">
-      <div id="totalTables" class="total-tables"></div>
-      <div class="results-wrapper">
-        <nav id="paginationHeader"></nav>
-        <div id="results" class="results"></div>
-        <nav id="paginationFooter"></nav>
-      </div>
-    </div>
-    <script src="main.js?2021061401"></script>
+
+    <script src="main.js?v0.1.0"></script>
   </body>
 </html>

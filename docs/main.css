@@ -1,42 +1,153 @@
-/* 
- * 全般
+/**
+ * サイト
  */
-table {
-	border-collapse: separate;
-	border-spacing: 0;
+body {
+	margin: 0;
+	font-family: sans-serif;
+	line-height: 1.5;
+	color: #282828;
 }
 
 img {
-	vertical-align: top;
+	vertical-align: middle;
 }
 
-/* 
+a {
+	text-decoration: none;
+}
+
+a[href]:hover {
+	text-decoration: underline;
+}
+
+input {
+	font: inherit;
+}
+
+.site-header {
+	display: flex;
+	box-sizing: content-box;
+	border-bottom: 1px solid gainsboro;
+	white-space: nowrap;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	background-color: #fff;
+}
+
+.site-title {
+	margin: 0 12px;
+}
+
+.site-title > a {
+	display: inline-block;
+	text-align: center;
+}
+
+.site-main {
+	padding-bottom: 8px;
+}
+
+@media (min-width: 768px) {
+	.site-header {
+		height: 64px;
+	}
+
+	.site-title {
+		font-size: 22px;
+		line-height: 32px;
+	}
+
+	.site-main {
+		padding-top: 65px;
+	}
+}
+
+@media (max-width: 767px) {
+	.site-header {
+		height: 48px;
+	}
+
+	.site-title {
+		font-size: 16px;
+		line-height: 24px;
+	}
+
+	.site-main {
+		padding-top: 49px;
+	}
+}
+
+.site-main h1,
+.site-main h2,
+.site-main h3,
+.site-main h4,
+.site-main h5,
+.site-main h6 {
+	margin-left: 12px;
+	margin-right: 12px;
+}
+
+.site-main p {
+	padding: 0 12px;
+}
+
+.site-main ul {
+	padding-left: 40px;
+	padding-right: 12px;
+}
+
+.site-main pre {
+	padding: 0 12px;
+}
+
+/**
  * シンタックスハイライト
  */
 .code {
-	font-family: monospace;
-	margin: 2px;
-	padding: 5px;
-	background-color: #fafafa;
+	white-space: pre-wrap;
 	word-break: break-all;
+	background-color: #fafafa;
 }
 
-.code--comment {
+.code__comment {
 	color: #969696;
 }
 
-.code--statement {
-	color: #0000ff;
-}
-
-.code--constant {
+.code__constant {
 	color: #777700;
 }
 
-/* 
+.code__statement {
+	color: #0000ff;
+}
+
+.code__type {
+	color: #0000ff;
+}
+
+/**
  * アプリケーション
  */
-/* アプリケーション > トータル表 */
+/**
+ * アプリケーション > 全般
+ */
+.togglable:not(.displayed) {
+	display: none;
+}
+
+.error {
+	font-weight: bold;
+	color: red;
+}
+
+.file {
+	width: 100%;
+}
+
+/**
+ * アプリケーション > トータル表
+ */
 .total-tables {
 	display: flex;
 	flex-wrap: wrap;
@@ -46,6 +157,8 @@ img {
 
 .total-table {
 	margin: 10px;
+	border-collapse: separate;
+	border-spacing: 0;
 }
 
 .total-table td {
@@ -70,27 +183,13 @@ img {
 	background-color: #f0f8ff;
 }
 
-.total-table--selected-column-1 td:nth-child(2),
-.total-table--selected-column-1 th:nth-child(2) {
+.total-table--selected-column {
 	background-color: #f0f8ff;
 }
 
-.total-table--selected-column-2 td:nth-child(3),
-.total-table--selected-column-2 th:nth-child(3) {
-	background-color: #f0f8ff;
-}
-
-.total-table--selected-column-3 td:nth-child(4),
-.total-table--selected-column-3 th:nth-child(4) {
-	background-color: #f0f8ff;
-}
-
-.total-table--selected-column-4 td:nth-child(5),
-.total-table--selected-column-4 th:nth-child(5) {
-	background-color: #f0f8ff;
-}
-
-/* アプリケーション > リザルト一覧 */
+/**
+ * アプリケーション > リザルト一覧
+ */
 .results-wrapper {
 	display: flex;
 	flex-direction: column;
@@ -117,7 +216,7 @@ img {
 	background-color: #fff;
 }
 
-.page-ellipses {
+.page-ellipsis {
 	display: inline-block;
 	padding-left: 8px;
 	padding-right: 8px;
