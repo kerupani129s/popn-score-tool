@@ -6,6 +6,11 @@
 	const pagesLimit     = pagesLimitHalf * 2 + 1;
 
 	// 
+	const MEDAL_NONE = 'meda_none.png';
+	const RANK_NONE = 'rank_none.png';
+	const SCORE_NONE = '-';
+
+	// 
 	const types = ['easy', 'normal', 'hyper', 'ex'];
 
 	const medals = [
@@ -14,14 +19,14 @@
 		'meda_e.png', 'meda_f.png', 'meda_g.png',
 		'meda_k.png', // メモ: イージークリアの順番注意
 		'meda_h.png', 'meda_i.png', 'meda_j.png',
-		// 'meda_none.png',
+		// MEDAL_NONE,
 	];
 
 	const ranks = [
 		'rank_s.png',
 		'rank_a3.png', 'rank_a2.png', 'rank_a1.png',
 		'rank_b.png', 'rank_c.png', 'rank_d.png', 'rank_e.png',
-		// 'rank_none.png',
+		// RANK_NONE,
 	];
 
 	// 
@@ -33,6 +38,23 @@
 			reader.onerror = () => reject(reader.error);
 			reader.readAsText(file);
 		});
+
+		const isInvalidResult = result => {
+
+			// メモ: '0' は falsy でない
+			//       空文字列 '' は falsy
+			if ( ! result.music.id ) return true; // id は一意であればいいため、文字列に限る必要はない
+			if ( typeof result.music.genre !== 'string' || ! result.music.genre ) return true;
+			if ( typeof result.music.title !== 'string' || ! result.music.title ) return true;
+
+			if ( ! types.includes(result.type) ) return true;
+			if ( result.medal !== MEDAL_NONE && ! medals.includes(result.medal) ) return true;
+			if ( result.rank !== RANK_NONE && ! ranks.includes(result.rank) ) return true;
+			if ( result.score !== null && typeof result.score !== 'number' ) return true; // メモ: 今後、仕様変更する可能性を考えてコードを残す
+
+			return false;
+
+		};
 
 		const getResults = rawPlayData => {
 
@@ -47,7 +69,7 @@
 				const music = {
 					id: musicResult.id,
 					genre: musicResult.genre,
-					title: musicResult.title
+					title: musicResult.title,
 				};
 
 				// リザルト情報
@@ -61,9 +83,14 @@
 						music,
 						type,
 						medal: resultByType.medal,
-						rank: resultByType.rank,
-						score: resultByType.score
+						rank: resultByType.rank, // メモ: プレー済みでも resultByType.rank === RANK_NONE の可能性あり
+						score: resultByType.score === SCORE_NONE ? null : Number(resultByType.score),
 					};
+
+					if ( isInvalidResult(result) ) {
+						console.error(result);
+						throw new Error('スコアデータが正しくありません');
+					}
 
 					results.push(result);
 
