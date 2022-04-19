@@ -386,30 +386,33 @@
 
 		};
 
-		const filterResultsByTableCell = (results, tableElement, row, column) => {
+		const filterResultsByMedalsTable = (results, tableElement, row, column) => {
 
-			unselectAll();
+			const medal = (0 === row || row === MEDALS.length + 1) ? null : MEDALS[row - 1];
+			const type = (0 === column || column === TYPES.length + 1) ? null : TYPES[column - 1];
+
+			selectTotalTableCell(tableElement, row, column, medal === null, type === null);
 
 			// 
-			const id = tableElement.id;
+			filterResults(results, r => (
+				((medal === null && MEDALS.includes(r.medal)) || r.medal === medal) &&
+				(type === null || r.type === type)
+			));
 
-			if ( 'medals-table' === id ) {
-				const medal = (0 === row || row === MEDALS.length + 1) ? null : MEDALS[row - 1];
-				const type = (0 === column || column === TYPES.length + 1) ? null : TYPES[column - 1];
-				selectTotalTableCell(tableElement, row, column, medal === null, type === null);
-				filterResults(results, r => (
-					((medal === null && MEDALS.includes(r.medal)) || r.medal === medal) &&
-					(type === null || r.type === type)
-				));
-			} else if ( 'ranks-table' === id ) {
-				const rank = (0 === row || row === RANKS.length + 1) ? null : RANKS[row - 1];
-				const type = (0 === column || column === TYPES.length + 1) ? null : TYPES[column - 1];
-				selectTotalTableCell(tableElement, row, column, rank === null, type === null);
-				filterResults(results, r => (
-					((rank === null && RANKS.includes(r.rank)) || r.rank === rank) &&
-					(type === null || r.type === type)
-				));
-			}
+		};
+
+		const filterResultsByRanksTable = (results, tableElement, row, column) => {
+
+			const rank = (0 === row || row === RANKS.length + 1) ? null : RANKS[row - 1];
+			const type = (0 === column || column === TYPES.length + 1) ? null : TYPES[column - 1];
+
+			selectTotalTableCell(tableElement, row, column, rank === null, type === null);
+
+			// 
+			filterResults(results, r => (
+				((rank === null && RANKS.includes(r.rank)) || r.rank === rank) &&
+				(type === null || r.type === type)
+			));
 
 		};
 
@@ -425,7 +428,16 @@
 			const column = cellElement.cellIndex;
 
 			// 
-			filterResultsByTableCell(results, tableElement, row, column);
+			unselectAll();
+
+			// 
+			const id = tableElement.id;
+
+			if ( 'medals-table' === id ) {
+				filterResultsByMedalsTable(results, tableElement, row, column);
+			} else if ( 'ranks-table' === id ) {
+				filterResultsByRanksTable(results, tableElement, row, column);
+			}
 
 		};
 
@@ -442,7 +454,7 @@
 			ranksTableElement.addEventListener('click', event => filterResultsOnEvent(event, results));
 
 			// 
-			filterResultsByTableCell(results, medalsTableElement, 0, 0);
+			filterResultsByMedalsTable(results, medalsTableElement, 0, 0);
 
 		};
 
