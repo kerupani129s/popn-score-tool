@@ -11,9 +11,9 @@
 	const SCORE_NONE = '-';
 
 	// 
-	const types = ['easy', 'normal', 'hyper', 'ex'];
+	const TYPES = ['easy', 'normal', 'hyper', 'ex'];
 
-	const medals = [
+	const MEDALS = [
 		'meda_a.png',
 		'meda_b.png', 'meda_c.png', 'meda_d.png',
 		'meda_e.png', 'meda_f.png', 'meda_g.png',
@@ -22,7 +22,7 @@
 		// MEDAL_NONE,
 	];
 
-	const ranks = [
+	const RANKS = [
 		'rank_s.png',
 		'rank_a3.png', 'rank_a2.png', 'rank_a1.png',
 		'rank_b.png', 'rank_c.png', 'rank_d.png', 'rank_e.png',
@@ -47,9 +47,9 @@
 			if ( typeof result.music.genre !== 'string' || ! result.music.genre ) return true;
 			if ( typeof result.music.title !== 'string' || ! result.music.title ) return true;
 
-			if ( ! types.includes(result.type) ) return true;
-			if ( result.medal !== MEDAL_NONE && ! medals.includes(result.medal) ) return true;
-			if ( result.rank !== RANK_NONE && ! ranks.includes(result.rank) ) return true;
+			if ( ! TYPES.includes(result.type) ) return true;
+			if ( result.medal !== MEDAL_NONE && ! MEDALS.includes(result.medal) ) return true;
+			if ( result.rank !== RANK_NONE && ! RANKS.includes(result.rank) ) return true;
 			if ( result.score !== null && typeof result.score !== 'number' ) return true; // メモ: 今後、仕様変更する可能性を考えてコードを残す
 
 			return false;
@@ -75,7 +75,7 @@
 				// リザルト情報
 				const resultsByType = musicResult.results || musicResult.score; // メモ: ツール旧バージョン互換性対策
 
-				for (const type of types) {
+				for (const type of TYPES) {
 
 					const resultByType = resultsByType[type];
 
@@ -134,10 +134,10 @@
 
 			if ( ! ['medals-table', 'ranks-table'].includes(id) ) return;
 
-			const rowMax = ('medals-table' === id ? medals.length : ranks.length) + 1; // + 2 - 1 = + 1
+			const rowMax = ('medals-table' === id ? MEDALS.length : RANKS.length) + 1; // + 2 - 1 = + 1
 			const rowInner = (0 === row || row === rowMax) ? null : row - 1;
 
-			const columnMax = types.length + 1; // + 2 - 1 = + 1
+			const columnMax = TYPES.length + 1; // + 2 - 1 = + 1
 			const columnInner = (0 === column || column === columnMax) ? null : column - 1;
 
 			// 
@@ -151,11 +151,11 @@
 		const filterMedals = (medalIndex, typeIndex, results) => {
 
 			// メモ: 否定演算子 ! にしてしまうと 0 も true になってしまう
-			const medal = medalIndex === null ? null : medals[medalIndex];
-			const type  = typeIndex === null ? null : types[typeIndex];
+			const medal = medalIndex === null ? null : MEDALS[medalIndex];
+			const type  = typeIndex === null ? null : TYPES[typeIndex];
 
 			// 
-			return results.filter(r => ((medal === null && medals.includes(r.medal)) || r.medal === medal)
+			return results.filter(r => ((medal === null && MEDALS.includes(r.medal)) || r.medal === medal)
 				&& (type === null || r.type === type));
 
 		};
@@ -163,11 +163,11 @@
 		const filterRanks = (rankIndex, typeIndex, results) => {
 
 			// メモ: 否定演算子 ! にしてしまうと 0 も true になってしまう
-			const rank = rankIndex === null ? null : ranks[rankIndex];
-			const type = typeIndex === null ? null : types[typeIndex];
+			const rank = rankIndex === null ? null : RANKS[rankIndex];
+			const type = typeIndex === null ? null : TYPES[typeIndex];
 
 			// 
-			return results.filter(r => ((rank === null && ranks.includes(r.rank)) || r.rank === rank)
+			return results.filter(r => ((rank === null && RANKS.includes(r.rank)) || r.rank === rank)
 				&& (type === null || r.type === type));
 
 		};
@@ -361,22 +361,22 @@
 
 		// 
 		const columnHeaders = (() => {
-			const row = types.map(type => type.toUpperCase());
+			const row = TYPES.map(type => type.toUpperCase());
 			row.unshift('');
 			row.push('合計');
 			return row;
 		})();
 
-		const rowHeadersOfMedals = medals.map(medal => '<img src="' + getMedalImageURL(medal) + '">');
+		const rowHeadersOfMedals = MEDALS.map(medal => '<img src="' + getMedalImageURL(medal) + '">');
 
-		const rowHeadersOfRanks = ranks.map(rank => '<img src="' + getMedalImageURL(rank) + '">');
+		const rowHeadersOfRanks = RANKS.map(rank => '<img src="' + getMedalImageURL(rank) + '">');
 
 		// 
 		const countOfMedals = (results, medal, type) => results.filter(r => r.type === type && r.medal === medal).length;
 
 		const createMedalsTableElement = results => {
 
-			const table = medals.map(medal => types.map(type => countOfMedals(results, medal, type)));
+			const table = MEDALS.map(medal => TYPES.map(type => countOfMedals(results, medal, type)));
 
 			// 
 			const tableElement = createTotalTableElement(table, columnHeaders, rowHeadersOfMedals, 'PLAYED');
@@ -393,7 +393,7 @@
 
 		const createRanksTableElement = results => {
 
-			const table = ranks.map(rank => types.map(type => countOfRanks(results, rank, type)));
+			const table = RANKS.map(rank => TYPES.map(type => countOfRanks(results, rank, type)));
 
 			// 
 			const tableElement = createTotalTableElement(table, columnHeaders, rowHeadersOfRanks, 'RANKED');
