@@ -129,17 +129,17 @@
 
 		const filterResults = (results, callback) => {
 			const filteredResults = results.filter(callback);
-			updateFilteredResult(filteredResults);
+			updateFilteredResults(filteredResults);
 		};
 
-		const updateFilteredResultOnEvent = (event, filteredResults) => {
+		const updateFilteredResultsOnEvent = (event, filteredResults) => {
 			const pageNumberElement = event.currentTarget;
 			const pageNo = pageNumberElement.dataset.pageNo;
 			const pageIndex = pageNo - 1;
-			updateFilteredResult(filteredResults, pageIndex);
+			updateFilteredResults(filteredResults, pageIndex);
 		};
 
-		const updateFilteredResult = (filteredResults, pageIndex = 0) => {
+		const updateFilteredResults = (filteredResults, pageIndex = 0) => {
 
 			// リザルト表
 			const offset = pageIndex * resultsLimit;
@@ -164,7 +164,7 @@
 					const pageNumberElements = paginationElement.querySelectorAll('[data-page-no]');
 
 					for (const pageNumberElement of pageNumberElements) {
-						pageNumberElement.addEventListener('click', event => updateFilteredResultOnEvent(event, filteredResults));
+						pageNumberElement.addEventListener('click', event => updateFilteredResultsOnEvent(event, filteredResults));
 					}
 
 				}
