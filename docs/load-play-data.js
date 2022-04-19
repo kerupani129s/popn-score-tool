@@ -87,7 +87,7 @@
 		// 
 		const parseQuery = query => new URLSearchParams(query);
 
-		const fileNameRegEx = /([^\/]*)$/;
+		const fileNameRegEx = /([^/]*)$/;
 		const getMedal = src => fileNameRegEx.exec(src)[1];
 		const getRank = getMedal;
 
