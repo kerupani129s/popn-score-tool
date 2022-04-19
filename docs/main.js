@@ -127,51 +127,11 @@
 		const resultsElement = document.getElementById('results');
 		const paginationElements = ['pagination-header', 'pagination-footer'].map(id => document.getElementById(id));
 
-		const filterResults = (results, callback) => {
-			const filteredResults = results.filter(callback);
-			updateFilteredResults(filteredResults);
-		};
-
-		const updateFilteredResultsOnEvent = (event, filteredResults) => {
-			const pageNumberElement = event.currentTarget;
-			const pageNo = pageNumberElement.dataset.pageNo;
-			const pageIndex = pageNo - 1;
-			updateFilteredResults(filteredResults, pageIndex);
-		};
-
-		const updateFilteredResults = (filteredResults, pageIndex = 0) => {
-
-			// リザルト表
-			const offset = pageIndex * resultsLimit;
-
-			const selectedResults = filteredResults.slice(offset, offset + resultsLimit);
-
-			resultsElement.innerHTML = getSelectedResultsHTML(selectedResults);
-
-			// ページネーション
-			const pageNo   = pageIndex + 1;
-			const pageLast = Math.ceil(filteredResults.length / resultsLimit);
-
-			const paginationHTML = pageLast !== 0 ? getPaginationHTML(pageNo, pageLast) : '';
-
-			for (const paginationElement of paginationElements) {
-
-				paginationElement.innerHTML = paginationHTML;
-
-				// 
-				if ( 2 <= pageLast ) {
-
-					const pageNumberElements = paginationElement.querySelectorAll('[data-page-no]');
-
-					for (const pageNumberElement of pageNumberElements) {
-						pageNumberElement.addEventListener('click', event => updateFilteredResultsOnEvent(event, filteredResults));
-					}
-
-				}
-
-			}
-
-		};
+		// 
+		const escapeHTML = html => html
+			.replaceAll('&', '&amp;')
+			.replaceAll('<', '&lt;').replaceAll('>', '&gt;')
+			.replaceAll('"', '&quot;').replaceAll('\'', '&#39;');
 
 		const getSelectedResultsHTML = selectedResults => {
 
@@ -189,6 +149,9 @@
 				'</table>';
 
 		};
+
+		// 
+		const getPageNumberHTML = (pageNo, isCurrentPage = false) => (isCurrentPage ? '<span class="page-number page-number--current">' + pageNo + '</span>' : '<span class="page-number" data-page-no="' + pageNo + '">' + pageNo + '</span>');
 
 		const getPaginationHTML = (pageNo, pageLast) => {
 
@@ -232,12 +195,53 @@
 
 		};
 
-		const getPageNumberHTML = (pageNo, isCurrentPage = false) => (isCurrentPage ? '<span class="page-number page-number--current">' + pageNo + '</span>' : '<span class="page-number" data-page-no="' + pageNo + '">' + pageNo + '</span>');
+		// 
+		const updateFilteredResultsOnEvent = (event, filteredResults) => {
+			const pageNumberElement = event.currentTarget;
+			const pageNo = pageNumberElement.dataset.pageNo;
+			const pageIndex = pageNo - 1;
+			updateFilteredResults(filteredResults, pageIndex);
+		};
 
-		const escapeHTML = html => html
-			.replaceAll('&', '&amp;')
-			.replaceAll('<', '&lt;').replaceAll('>', '&gt;')
-			.replaceAll('"', '&quot;').replaceAll('\'', '&#39;');
+		const updateFilteredResults = (filteredResults, pageIndex = 0) => {
+
+			// リザルト表
+			const offset = pageIndex * resultsLimit;
+
+			const selectedResults = filteredResults.slice(offset, offset + resultsLimit);
+
+			resultsElement.innerHTML = getSelectedResultsHTML(selectedResults);
+
+			// ページネーション
+			const pageNo   = pageIndex + 1;
+			const pageLast = Math.ceil(filteredResults.length / resultsLimit);
+
+			const paginationHTML = pageLast !== 0 ? getPaginationHTML(pageNo, pageLast) : '';
+
+			for (const paginationElement of paginationElements) {
+
+				paginationElement.innerHTML = paginationHTML;
+
+				// 
+				if ( 2 <= pageLast ) {
+
+					const pageNumberElements = paginationElement.querySelectorAll('[data-page-no]');
+
+					for (const pageNumberElement of pageNumberElements) {
+						pageNumberElement.addEventListener('click', event => updateFilteredResultsOnEvent(event, filteredResults));
+					}
+
+				}
+
+			}
+
+		};
+
+		// 
+		const filterResults = (results, callback) => {
+			const filteredResults = results.filter(callback);
+			updateFilteredResults(filteredResults);
+		};
 
 		return filterResults;
 
