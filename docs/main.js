@@ -49,7 +49,7 @@
 
 			if ( ! TYPES.includes(result.type) ) return true;
 			if ( result.medal !== MEDAL_NONE && ! MEDALS.includes(result.medal) ) return true;
-			if ( result.rank !== RANK_NONE && ! RANKS.includes(result.rank) ) return true;
+			if ( result.rank !== RANK_NONE && ! RANKS.includes(result.rank) ) return true; // メモ: プレー済みでも resultByType.rank === RANK_NONE の可能性あり
 			if ( result.score !== null && typeof result.score !== 'number' ) return true; // メモ: 今後、仕様変更する可能性を考えてコードを残す
 
 			return false;
@@ -127,84 +127,9 @@
 		const resultsElement = document.getElementById('results');
 		const paginationElements = ['pagination-header', 'pagination-footer'].map(id => document.getElementById(id));
 
-		const filterResults = (tableElement, row, column, results) => {
-
-			// 
-			const id = tableElement.id;
-
-			if ( ! ['medals-table', 'ranks-table'].includes(id) ) return;
-
-			const rowMax = ('medals-table' === id ? MEDALS.length : RANKS.length) + 1; // + 2 - 1 = + 1
-			const rowInner = (0 === row || row === rowMax) ? null : row - 1;
-
-			const columnMax = TYPES.length + 1; // + 2 - 1 = + 1
-			const columnInner = (0 === column || column === columnMax) ? null : column - 1;
-
-			// 
-			const filteredResults = 'medals-table' === id ? filterMedals(rowInner, columnInner, results) : filterRanks(rowInner, columnInner, results);
-
-			updateTotalTable(tableElement, row, column, rowInner === null, columnInner === null); // メモ: 否定演算子 ! にしてしまうと 0 も true になってしまう
+		const filterResults = (results, callback) => {
+			const filteredResults = results.filter(callback);
 			updateFilteredResult(filteredResults);
-
-		};
-
-		const filterMedals = (medalIndex, typeIndex, results) => {
-
-			// メモ: 否定演算子 ! にしてしまうと 0 も true になってしまう
-			const medal = medalIndex === null ? null : MEDALS[medalIndex];
-			const type  = typeIndex === null ? null : TYPES[typeIndex];
-
-			// 
-			return results.filter(r => ((medal === null && MEDALS.includes(r.medal)) || r.medal === medal)
-				&& (type === null || r.type === type));
-
-		};
-
-		const filterRanks = (rankIndex, typeIndex, results) => {
-
-			// メモ: 否定演算子 ! にしてしまうと 0 も true になってしまう
-			const rank = rankIndex === null ? null : RANKS[rankIndex];
-			const type = typeIndex === null ? null : TYPES[typeIndex];
-
-			// 
-			return results.filter(r => ((rank === null && RANKS.includes(r.rank)) || r.rank === rank)
-				&& (type === null || r.type === type));
-
-		};
-
-		const updateTotalTable = (tableElement, row, column, isOuterRow, isOuterColumn) => {
-
-			// 表示状態を初期化
-			const selectedElements = document.querySelectorAll('[data-selected]');
-
-			for (const selectedElement of selectedElements) {
-
-				const selectedType = selectedElement.dataset.selected;
-
-				selectedElement.classList.remove('total-table--selected-' + selectedType);
-				delete selectedElement.dataset.selected;
-
-			}
-
-			// 表示状態を更新
-			const cellElement = tableElement.rows[row].cells[column];
-
-			cellElement.classList.add('total-table--selected-cell');
-			cellElement.dataset.selected = 'cell';
-
-			if ( isOuterRow && isOuterColumn ) {
-				tableElement.classList.add('total-table--selected-all');
-				tableElement.dataset.selected = 'all';
-			} else if ( isOuterRow ) {
-				const columnElement = tableElement.getElementsByTagName('col')[column];
-				columnElement.classList.add('total-table--selected-column');
-				columnElement.dataset.selected = 'column';
-			} else if ( isOuterColumn ) {
-				const rowElement = tableElement.rows[row];
-				rowElement.classList.add('total-table--selected-row');
-				rowElement.dataset.selected = 'row';
-			}
-
 		};
 
 		const updateFilteredResultOnEvent = (event, filteredResults) => {
@@ -423,6 +348,71 @@
 
 		};
 
+		// 
+		const unselectAll = () => {
+
+			const selectedElements = totalTablesElement.querySelectorAll('[data-selected]');
+
+			for (const selectedElement of selectedElements) {
+
+				const selectedType = selectedElement.dataset.selected;
+
+				selectedElement.classList.remove('total-table--selected-' + selectedType);
+				delete selectedElement.dataset.selected;
+
+			}
+
+		};
+
+		const selectTotalTableCell = (tableElement, row, column, isOuterRow, isOuterColumn) => {
+
+			const cellElement = tableElement.rows[row].cells[column];
+
+			cellElement.classList.add('total-table--selected-cell');
+			cellElement.dataset.selected = 'cell';
+
+			if ( isOuterRow && isOuterColumn ) {
+				tableElement.classList.add('total-table--selected-all');
+				tableElement.dataset.selected = 'all';
+			} else if ( isOuterRow ) {
+				const columnElement = tableElement.getElementsByTagName('col')[column];
+				columnElement.classList.add('total-table--selected-column');
+				columnElement.dataset.selected = 'column';
+			} else if ( isOuterColumn ) {
+				const rowElement = tableElement.rows[row];
+				rowElement.classList.add('total-table--selected-row');
+				rowElement.dataset.selected = 'row';
+			}
+
+		};
+
+		const filterResultsByTableCell = (results, tableElement, row, column) => {
+
+			unselectAll();
+
+			// 
+			const id = tableElement.id;
+
+			if ( 'medals-table' === id ) {
+				const medal = (0 === row || row === MEDALS.length + 1) ? null : MEDALS[row - 1];
+				const type = (0 === column || column === TYPES.length + 1) ? null : TYPES[column - 1];
+				selectTotalTableCell(tableElement, row, column, medal === null, type === null);
+				filterResults(results, r => (
+					((medal === null && MEDALS.includes(r.medal)) || r.medal === medal) &&
+					(type === null || r.type === type)
+				));
+			} else if ( 'ranks-table' === id ) {
+				const rank = (0 === row || row === RANKS.length + 1) ? null : RANKS[row - 1];
+				const type = (0 === column || column === TYPES.length + 1) ? null : TYPES[column - 1];
+				selectTotalTableCell(tableElement, row, column, rank === null, type === null);
+				filterResults(results, r => (
+					((rank === null && RANKS.includes(r.rank)) || r.rank === rank) &&
+					(type === null || r.type === type)
+				));
+			}
+
+		};
+
 		const filterResultsOnEvent = (event, results) => {
 
 			const tableElement = event.currentTarget;
@@ -435,10 +425,11 @@
 			const column = cellElement.cellIndex;
 
 			// 
-			filterResults(tableElement, row, column, results);
+			filterResultsByTableCell(results, tableElement, row, column);
 
 		};
 
+		// 
 		const renderTotalTables = results => {
 
 			// 
@@ -451,7 +442,7 @@
 			ranksTableElement.addEventListener('click', event => filterResultsOnEvent(event, results));
 
 			// 
-			filterResults(medalsTableElement, 0, 0, results);
+			filterResultsByTableCell(results, medalsTableElement, 0, 0);
 
 		};
 
