@@ -1,9 +1,9 @@
 (() => {
 
 	// 定数
-	const resultsLimit   = 20;
-	const pagesLimitHalf = 4;
-	const pagesLimit     = pagesLimitHalf * 2 + 1;
+	const RESULT_LIMIT    = 20;
+	const PAGE_LIMIT_HALF = 4;
+	const PAGE_LIMIT      = PAGE_LIMIT_HALF * 2 + 1;
 
 	// 
 	const MEDAL_NONE = 'meda_none.png';
@@ -175,7 +175,7 @@
 
 			let paginationHTML = '';
 
-			if ( pageTotal <= pagesLimit ) {
+			if ( pageTotal <= PAGE_LIMIT ) {
 
 				for (let p = 1; p <= pageTotal; p++) {
 					paginationHTML += getPageNumberHTML(p, pageNo === p);
@@ -183,8 +183,8 @@
 
 			} else {
 
-				const pageNoCenterMin = 1 + pagesLimitHalf;
-				const pageNoCenterMax = pageTotal - pagesLimitHalf;
+				const pageNoCenterMin = 1 + PAGE_LIMIT_HALF;
+				const pageNoCenterMax = pageTotal - PAGE_LIMIT_HALF;
 				const pageNoCenter = Math.min(pageNoCenterMax, Math.max(pageNoCenterMin, pageNo));
 
 				// 
@@ -196,7 +196,7 @@
 				}
 
 				// 
-				for (let p = pageNoCenter - pagesLimitHalf; p <=  pageNoCenter + pagesLimitHalf; p++) {
+				for (let p = pageNoCenter - PAGE_LIMIT_HALF; p <=  pageNoCenter + PAGE_LIMIT_HALF; p++) {
 					paginationHTML += getPageNumberHTML(p, pageNo === p);
 				}
 
@@ -244,14 +244,14 @@
 
 			// リザルト表
 			const pageIndex = pageNo - 1;
-			const offset = pageIndex * resultsLimit;
+			const offset = pageIndex * RESULT_LIMIT;
 
-			const selectedResults = filteredResults.slice(offset, offset + resultsLimit);
+			const selectedResults = filteredResults.slice(offset, offset + RESULT_LIMIT);
 
 			resultsElement.innerHTML = getSelectedResultsHTML(selectedResults);
 
 			// ページネーション
-			const pageTotal = Math.ceil(filteredResults.length / resultsLimit);
+			const pageTotal = Math.ceil(filteredResults.length / RESULT_LIMIT);
 
 			const paginationHTML = pageTotal !== 0 ? getPaginationHTML(pageNo, pageTotal) : '';
 
