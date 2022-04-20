@@ -171,39 +171,39 @@
 			)
 		);
 
-		const getPaginationHTML = (pageNo, pageLast) => {
+		const getPaginationHTML = (pageNo, pageTotal) => {
 
 			let paginationHTML = '';
 
-			if ( pageLast <= pagesLimit ) {
+			if ( pageTotal <= pagesLimit ) {
 
-				for (let p = 1; p <= pageLast; p++) {
+				for (let p = 1; p <= pageTotal; p++) {
 					paginationHTML += getPageNumberHTML(p, pageNo === p);
 				}
 
 			} else {
 
-				const pageCenter = Math.min(pageLast - pagesLimitHalf, Math.max(pagesLimitHalf + 1, pageNo));
+				const pageNoCenter = Math.min(pageTotal - pagesLimitHalf, Math.max(pagesLimitHalf + 1, pageNo));
 
-				if ( pagesLimitHalf + 2 <= pageCenter ) {
+				if ( pagesLimitHalf + 2 <= pageNoCenter ) {
 
 					paginationHTML += getPageNumberHTML(1);
 
-					if ( pagesLimitHalf + 3 <= pageCenter )
+					if ( pagesLimitHalf + 3 <= pageNoCenter )
 						paginationHTML += '<span class="page-ellipsis">...</span>';
 
 				}
 
-				for (let p = pageCenter - pagesLimitHalf; p <=  pageCenter + pagesLimitHalf; p++) {
+				for (let p = pageNoCenter - pagesLimitHalf; p <=  pageNoCenter + pagesLimitHalf; p++) {
 					paginationHTML += getPageNumberHTML(p, pageNo === p);
 				}
 
-				if ( pageCenter <= pageLast - pagesLimitHalf - 1 ) {
+				if ( pageNoCenter <= pageTotal - pagesLimitHalf - 1 ) {
 
-					if ( pageCenter <= pageLast - pagesLimitHalf - 2 )
+					if ( pageNoCenter <= pageTotal - pagesLimitHalf - 2 )
 						paginationHTML += '<span class="page-ellipsis">...</span>';
 
-					paginationHTML += getPageNumberHTML(pageLast);
+					paginationHTML += getPageNumberHTML(pageTotal);
 
 				}
 
@@ -220,12 +220,12 @@
 			updateFilteredResults(filteredResults, pageNo);
 		};
 
-		const updatePagination = (paginationElement, paginationHTML, filteredResults, pageLast) => {
+		const updatePagination = (paginationElement, paginationHTML, filteredResults, pageTotal) => {
 
 			paginationElement.innerHTML = paginationHTML;
 
 			// 
-			if ( 2 <= pageLast ) {
+			if ( 2 <= pageTotal ) {
 
 				const pageNumberElements = paginationElement.querySelectorAll('[data-page-no]');
 
@@ -250,12 +250,12 @@
 			resultsElement.innerHTML = getSelectedResultsHTML(selectedResults);
 
 			// ページネーション
-			const pageLast = Math.ceil(filteredResults.length / resultsLimit);
+			const pageTotal = Math.ceil(filteredResults.length / resultsLimit);
 
-			const paginationHTML = pageLast !== 0 ? getPaginationHTML(pageNo, pageLast) : '';
+			const paginationHTML = pageTotal !== 0 ? getPaginationHTML(pageNo, pageTotal) : '';
 
 			for (const paginationElement of paginationElements) {
-				updatePagination(paginationElement, paginationHTML, filteredResults, pageLast);
+				updatePagination(paginationElement, paginationHTML, filteredResults, pageTotal);
 			}
 
 		};
