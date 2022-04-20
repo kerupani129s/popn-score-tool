@@ -216,9 +216,8 @@
 		// 
 		const updateFilteredResultsOnEvent = (event, filteredResults) => {
 			const pageNumberElement = event.currentTarget;
-			const pageNo = pageNumberElement.dataset.pageNo;
-			const pageIndex = pageNo - 1;
-			updateFilteredResults(filteredResults, pageIndex);
+			const pageNo = Number(pageNumberElement.dataset.pageNo);
+			updateFilteredResults(filteredResults, pageNo);
 		};
 
 		const updatePagination = (paginationElement, paginationHTML, filteredResults, pageLast) => {
@@ -240,9 +239,10 @@
 
 		};
 
-		const updateFilteredResults = (filteredResults, pageIndex = 0) => {
+		const updateFilteredResults = (filteredResults, pageNo = 1) => {
 
 			// リザルト表
+			const pageIndex = pageNo - 1;
 			const offset = pageIndex * resultsLimit;
 
 			const selectedResults = filteredResults.slice(offset, offset + resultsLimit);
@@ -250,7 +250,6 @@
 			resultsElement.innerHTML = getSelectedResultsHTML(selectedResults);
 
 			// ページネーション
-			const pageNo   = pageIndex + 1;
 			const pageLast = Math.ceil(filteredResults.length / resultsLimit);
 
 			const paginationHTML = pageLast !== 0 ? getPaginationHTML(pageNo, pageLast) : '';
