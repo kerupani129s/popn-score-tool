@@ -132,6 +132,10 @@ input {
 /**
  * アプリケーション > 全般
  */
+.file {
+	width: 100%;
+}
+
 .togglable:not(.displayed) {
 	display: none;
 }
@@ -139,10 +143,6 @@ input {
 .error {
 	font-weight: bold;
 	color: red;
-}
-
-.file {
-	width: 100%;
 }
 
 /**
