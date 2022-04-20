@@ -133,6 +133,20 @@
 			.replaceAll('<', '&lt;').replaceAll('>', '&gt;')
 			.replaceAll('"', '&quot;').replaceAll('\'', '&#39;');
 
+		const getResultHTML = r => (
+			'<tr>' +
+			(r.music.genre !== r.music.title ? (
+				'<td>' + escapeHTML(r.music.genre) + '</td>' + '<td>' + escapeHTML(r.music.title) + '</td>'
+			) : (
+				'<td colspan="2">' + escapeHTML(r.music.genre) + '</td>'
+			)) +
+			'<td>' + r.type.toUpperCase() + '</td>' +
+			'<td><img src="' + getMedalImageURL(r.medal) + '"></td>' +
+			'<td><img src="' + getMedalImageURL(r.rank) + '"></td>' +
+			'<td>' + r.score + '</td>' +
+			'</tr>'
+		);
+
 		const getSelectedResultsHTML = selectedResults => {
 
 			if ( selectedResults.length === 0 ) {
@@ -143,15 +157,19 @@
 				'<thead><tr>' +
 				'<th>ジャンル名</th><th>曲名</th><th>タイプ</th><th>メダル</th><th>ランク</th><th>スコア</th>' +
 				'</tr></thead>' +
-				'<tbody>' +
-				selectedResults.map(r => '<tr>' + (r.music.genre !== r.music.title ? '<td>' + escapeHTML(r.music.genre) + '</td><td>' + escapeHTML(r.music.title) + '</td>' : '<td colspan="2">' + escapeHTML(r.music.genre) + '</td>') + '<td>' + r.type.toUpperCase() + '</td><td><img src="' + getMedalImageURL(r.medal) + '"></td><td><img src="' + getMedalImageURL(r.rank) + '"></td><td>' + r.score + '</td></tr>').join('') +
-				'</tbody>' +
+				'<tbody>' + selectedResults.map(getResultHTML).join('') + '</tbody>' +
 				'</table>';
 
 		};
 
 		// 
-		const getPageNumberHTML = (pageNo, isCurrentPage = false) => (isCurrentPage ? '<span class="page-number page-number--current">' + pageNo + '</span>' : '<span class="page-number" data-page-no="' + pageNo + '">' + pageNo + '</span>');
+		const getPageNumberHTML = (pageNo, isCurrentPage = false) => (
+			isCurrentPage ? (
+				'<span class="page-number page-number--current">' + pageNo + '</span>'
+			) : (
+				'<span class="page-number" data-page-no="' + pageNo + '">' + pageNo + '</span>'
+			)
+		);
 
 		const getPaginationHTML = (pageNo, pageLast) => {
 
