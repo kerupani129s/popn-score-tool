@@ -221,6 +221,25 @@
 			updateFilteredResults(filteredResults, pageIndex);
 		};
 
+		const updatePagination = (paginationElement, paginationHTML, filteredResults, pageLast) => {
+
+			paginationElement.innerHTML = paginationHTML;
+
+			// 
+			if ( 2 <= pageLast ) {
+
+				const pageNumberElements = paginationElement.querySelectorAll('[data-page-no]');
+
+				for (const pageNumberElement of pageNumberElements) {
+					pageNumberElement.addEventListener('click', event => (
+						updateFilteredResultsOnEvent(event, filteredResults)
+					));
+				}
+
+			}
+
+		};
+
 		const updateFilteredResults = (filteredResults, pageIndex = 0) => {
 
 			// リザルト表
@@ -237,20 +256,7 @@
 			const paginationHTML = pageLast !== 0 ? getPaginationHTML(pageNo, pageLast) : '';
 
 			for (const paginationElement of paginationElements) {
-
-				paginationElement.innerHTML = paginationHTML;
-
-				// 
-				if ( 2 <= pageLast ) {
-
-					const pageNumberElements = paginationElement.querySelectorAll('[data-page-no]');
-
-					for (const pageNumberElement of pageNumberElements) {
-						pageNumberElement.addEventListener('click', event => updateFilteredResultsOnEvent(event, filteredResults));
-					}
-
-				}
-
+				updatePagination(paginationElement, paginationHTML, filteredResults, pageLast);
 			}
 
 		};
