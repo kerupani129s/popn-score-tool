@@ -183,28 +183,29 @@
 
 			} else {
 
-				const pageNoCenter = Math.min(pageTotal - pagesLimitHalf, Math.max(pagesLimitHalf + 1, pageNo));
+				const pageNoCenterMin = 1 + pagesLimitHalf;
+				const pageNoCenterMax = pageTotal - pagesLimitHalf;
+				const pageNoCenter = Math.min(pageNoCenterMax, Math.max(pageNoCenterMin, pageNo));
 
-				if ( pagesLimitHalf + 2 <= pageNoCenter ) {
-
+				// 
+				if ( pageNoCenterMin < pageNoCenter ) {
 					paginationHTML += getPageNumberHTML(1);
-
-					if ( pagesLimitHalf + 3 <= pageNoCenter )
+					if ( pageNoCenterMin + 1 < pageNoCenter ) {
 						paginationHTML += '<span class="page-ellipsis">...</span>';
-
+					}
 				}
 
+				// 
 				for (let p = pageNoCenter - pagesLimitHalf; p <=  pageNoCenter + pagesLimitHalf; p++) {
 					paginationHTML += getPageNumberHTML(p, pageNo === p);
 				}
 
-				if ( pageNoCenter <= pageTotal - pagesLimitHalf - 1 ) {
-
-					if ( pageNoCenter <= pageTotal - pagesLimitHalf - 2 )
+				// 
+				if ( pageNoCenter < pageNoCenterMax ) {
+					if ( pageNoCenter < pageNoCenterMax - 1 ) {
 						paginationHTML += '<span class="page-ellipsis">...</span>';
-
+					}
 					paginationHTML += getPageNumberHTML(pageTotal);
-
 				}
 
 			}
