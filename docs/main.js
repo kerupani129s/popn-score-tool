@@ -1,6 +1,9 @@
 (() => {
 
 	// 定数
+	const MEDAL_IMAGE_PARAM = 'v0.1.0';
+
+	// 
 	const RESULT_LIMIT    = 20;
 	const PAGE_LIMIT_HALF = 4;
 	const PAGE_LIMIT      = PAGE_LIMIT_HALF * 2 + 1;
@@ -120,7 +123,7 @@
 	})();
 
 	// 
-	const getMedalImageURL = name => './images/medal/svg/' + name.replace('.png', '.svg') + '?v0.1.0';
+	const getMedalImageURL = name => './images/medal/svg/' + name.replace('.png', '.svg') + '?' + MEDAL_IMAGE_PARAM;
 
 	const filterResults = (() => {
 
