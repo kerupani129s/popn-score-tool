@@ -33,6 +33,23 @@
 	];
 
 	// 
+	const MEDALS_ALT = new Map([
+		'金★',
+		'銀★', '銀◆', '銀●',
+		'銅★', '銅◆', '銅●',
+		'若葉', // メモ: イージークリアの順番注意
+		'黒★', '黒◆', '黒●',
+		// '-',
+	].map((alt, i) => [MEDALS[i], alt]));
+
+	const RANKS_ALT = new Map([
+		'S',
+		'AAA', 'AA', 'A',
+		'B', 'C', 'D', 'E',
+		// '-',
+	].map((alt, i) => [RANKS[i], alt]));
+
+	// 
 	const getPlayDataFromFile = (() => {
 
 		const readAsText = file => new Promise((resolve, reject) => {
@@ -127,6 +144,10 @@
 	// 
 	const getMedalImageURL = name => './images/medal/svg/' + name.replace('.png', '.svg') + '?' + MEDAL_IMAGE_PARAM;
 
+	const getMedalImageHTML = medal => '<img src="' + getMedalImageURL(medal) + '" alt="' + MEDALS_ALT.get(medal) + '">';
+	const getRankImageHTML = rank => '<img src="' + getMedalImageURL(rank) + '" alt="' + RANKS_ALT.get(rank) + '">';
+
+	// 
 	const filterResults = (() => {
 
 		const resultsElement = document.getElementById('results');
@@ -146,8 +167,8 @@
 				'<td colspan="2">' + escapeHTML(r.music.genre) + '</td>'
 			)) +
 			'<td>' + r.type.toUpperCase() + '</td>' +
-			'<td><img src="' + getMedalImageURL(r.medal) + '"></td>' +
-			'<td><img src="' + getMedalImageURL(r.rank) + '"></td>' +
+			'<td>' + getMedalImageHTML(r.medal) + '</td>' +
+			'<td>' + getRankImageHTML(r.rank) + '</td>' +
 			'<td>' + r.score + '</td>' +
 			'</tr>'
 		);
@@ -325,9 +346,8 @@
 			return row;
 		})();
 
-		const rowHeadersOfMedals = MEDALS.map(medal => '<img src="' + getMedalImageURL(medal) + '">');
-
-		const rowHeadersOfRanks = RANKS.map(rank => '<img src="' + getMedalImageURL(rank) + '">');
+		const rowHeadersOfMedals = MEDALS.map(getMedalImageHTML);
+		const rowHeadersOfRanks = RANKS.map(getRankImageHTML);
 
 		// 
 		const countOfMedals = (results, medal, type) => results.filter(r => r.type === type && r.medal === medal).length;
