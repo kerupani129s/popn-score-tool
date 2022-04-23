@@ -53,7 +53,7 @@
 			if ( ! TYPES.includes(result.type) ) return true;
 			if ( result.medal !== MEDAL_NONE && ! MEDALS.includes(result.medal) ) return true;
 			if ( result.rank !== RANK_NONE && ! RANKS.includes(result.rank) ) return true; // メモ: プレー済みでも resultByType.rank === RANK_NONE の可能性あり
-			if ( result.score !== null && typeof result.score !== 'number' ) return true; // メモ: 今後、仕様変更する可能性を考えてコードを残す
+			if ( Number.isNaN(result.score) ) return true;
 
 			return false;
 
@@ -82,12 +82,14 @@
 
 					const resultByType = resultsByType[type];
 
+					if ( resultByType.score === SCORE_NONE ) continue;
+
 					const result = {
 						music,
 						type,
 						medal: resultByType.medal,
 						rank: resultByType.rank, // メモ: プレー済みでも resultByType.rank === RANK_NONE の可能性あり
-						score: resultByType.score === SCORE_NONE ? null : Number(resultByType.score),
+						score: Number(resultByType.score),
 					};
 
 					if ( isInvalidResult(result) ) {
