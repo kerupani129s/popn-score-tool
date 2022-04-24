@@ -266,9 +266,9 @@
 
 		};
 
-		const updateFilteredResults = (filteredResults, pageNo = 1) => {
+		// 
+		const updateSelectedResults = (filteredResults, pageNo) => {
 
-			// リザルト表
 			const pageIndex = pageNo - 1;
 			const offset = pageIndex * RESULT_LIMIT;
 
@@ -276,7 +276,10 @@
 
 			resultsElement.innerHTML = getSelectedResultsHTML(selectedResults);
 
-			// ページネーション
+		};
+
+		const updatePagenations = (filteredResults, pageNo) => {
+
 			const pageTotal = Math.ceil(filteredResults.length / RESULT_LIMIT);
 
 			const paginationHTML = pageTotal !== 0 ? getPaginationHTML(pageNo, pageTotal) : '';
@@ -285,6 +288,11 @@
 				updatePagination(paginationElement, paginationHTML, filteredResults, pageTotal);
 			}
 
+		};
+
+		const updateFilteredResults = (filteredResults, pageNo = 1) => {
+			updateSelectedResults(filteredResults, pageNo);
+			updatePagenations(filteredResults, pageNo);
 		};
 
 		// 
