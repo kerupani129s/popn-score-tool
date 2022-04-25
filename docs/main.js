@@ -410,17 +410,28 @@
 		};
 
 		// 
+		const select = (element, type) => {
+
+			element.classList.add('total-table--selected-' + type);
+			element.dataset.selected = type;
+
+		};
+
+		const unselect = element => {
+
+			const type = element.dataset.selected;
+
+			element.classList.remove('total-table--selected-' + type);
+			delete element.dataset.selected;
+
+		};
+
 		const unselectAll = () => {
 
 			const selectedElements = totalTablesElement.querySelectorAll('[data-selected]');
 
 			for (const selectedElement of selectedElements) {
-
-				const selectedType = selectedElement.dataset.selected;
-
-				selectedElement.classList.remove('total-table--selected-' + selectedType);
-				delete selectedElement.dataset.selected;
-
+				unselect(selectedElement);
 			}
 
 		};
@@ -429,20 +440,16 @@
 
 			const cellElement = tableElement.rows[row].cells[column];
 
-			cellElement.classList.add('total-table--selected-cell');
-			cellElement.dataset.selected = 'cell';
+			select(cellElement, 'cell');
 
 			if ( isOuterRow && isOuterColumn ) {
-				tableElement.classList.add('total-table--selected-all');
-				tableElement.dataset.selected = 'all';
+				select(tableElement, 'all');
 			} else if ( isOuterRow ) {
 				const columnElement = tableElement.getElementsByTagName('col')[column];
-				columnElement.classList.add('total-table--selected-column');
-				columnElement.dataset.selected = 'column';
+				select(columnElement, 'column');
 			} else if ( isOuterColumn ) {
 				const rowElement = tableElement.rows[row];
-				rowElement.classList.add('total-table--selected-row');
-				rowElement.dataset.selected = 'row';
+				select(rowElement, 'row');
 			}
 
 		};
