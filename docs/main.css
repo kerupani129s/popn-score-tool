@@ -166,13 +166,13 @@ input {
 	text-align: right;
 }
 
-.total-table td,
-.total-table th {
+.total-table th,
+.total-table td {
 	border: 1px #fff solid;
 }
 
-.total-table td.total-table--selected-cell,
-.total-table th.total-table--selected-cell {
+.total-table th.total-table--selected-cell,
+.total-table td.total-table--selected-cell {
 	background-color: var(--selected-bg-color);
 	border-color: #0080ff;
 }
