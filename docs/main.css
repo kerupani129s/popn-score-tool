@@ -169,6 +169,7 @@ input {
 .total-table th,
 .total-table td {
 	border: 1px #fff solid;
+	cursor: pointer;
 }
 
 .total-table th.total-table--selected-cell,
@@ -220,6 +221,7 @@ input {
 	padding-right: 8px;
 	border: 1px #d0d0d0 solid;
 	background-color: #f6f6f6;
+	cursor: pointer;
 }
 
 .page-number--current {
