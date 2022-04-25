@@ -165,7 +165,8 @@ input {
 	text-align: right;
 }
 
-.total-table td, .total-table th {
+.total-table td,
+.total-table th {
 	border: 1px #fff solid;
 }
 
@@ -200,7 +201,8 @@ input {
 	margin: 10px;
 }
 
-.results-table td, .results-table th {
+.results-table td,
+.results-table th {
 	border: 1px #fff solid;
 }
 
