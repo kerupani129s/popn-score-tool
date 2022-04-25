@@ -159,7 +159,7 @@ input {
 	margin: 10px;
 	border-collapse: separate;
 	border-spacing: 0;
-	--selected-bg-color: #e8f4ff;
+	--selected-bg-color: #ecf6ff;
 }
 
 .total-table td {
