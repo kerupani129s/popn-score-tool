@@ -159,6 +159,7 @@ input {
 	margin: 10px;
 	border-collapse: separate;
 	border-spacing: 0;
+	--selected-bg-color: #e8f4ff;
 }
 
 .total-table td {
@@ -172,20 +173,20 @@ input {
 
 .total-table td.total-table--selected-cell,
 .total-table th.total-table--selected-cell {
-	background-color: #f0f8ff;
+	background-color: var(--selected-bg-color);
 	border-color: #0080ff;
 }
 
-.total-table--selected-all {
-	background-color: #f0f8ff;
+.total-table--selected-all tr {
+	background-color: var(--selected-bg-color);
 }
 
 .total-table--selected-row {
-	background-color: #f0f8ff;
+	background-color: var(--selected-bg-color);
 }
 
 .total-table--selected-column {
-	background-color: #f0f8ff;
+	background-color: var(--selected-bg-color);
 }
 
 /**
