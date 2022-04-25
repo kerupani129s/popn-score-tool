@@ -202,9 +202,16 @@ input {
 	margin: 10px;
 }
 
-.selected-results-table td,
-.selected-results-table th {
-	border: 1px #fff solid;
+.selected-results-table td.result-medal {
+	text-align: center;
+}
+
+.selected-results-table td.result-rank {
+	text-align: center;
+}
+
+.selected-results-table td.result-score {
+	text-align: right;
 }
 
 .page-number {

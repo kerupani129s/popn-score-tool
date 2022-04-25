@@ -154,6 +154,17 @@
 		const paginationElements = ['pagination-header', 'pagination-footer'].map(id => document.getElementById(id));
 
 		// 
+		const resultHeaderHTML = (
+			'<tr>' +
+			'<th class="music music-genre">ジャンル名</th>' +
+			'<th class="music music-title">曲名</th>' +
+			'<th class="result-type">タイプ</th>' +
+			'<th class="result-medal">メダル</th>' +
+			'<th class="result-rank">ランク</th>' +
+			'<th class="result-score">スコア</th>' +
+			'</tr>'
+		);
+
 		const escapeHTML = html => html
 			.replaceAll('&', '&amp;')
 			.replaceAll('<', '&lt;').replaceAll('>', '&gt;')
@@ -162,14 +173,15 @@
 		const getResultHTML = r => (
 			'<tr>' +
 			(r.music.genre !== r.music.title ? (
-				'<td>' + escapeHTML(r.music.genre) + '</td>' + '<td>' + escapeHTML(r.music.title) + '</td>'
+				'<td class="music music-genre">' + escapeHTML(r.music.genre) + '</td>' +
+				'<td class="music music-title">' + escapeHTML(r.music.title) + '</td>'
 			) : (
-				'<td colspan="2">' + escapeHTML(r.music.genre) + '</td>'
+				'<td colspan="2" class="music">' + escapeHTML(r.music.genre) + '</td>'
 			)) +
-			'<td>' + r.type.toUpperCase() + '</td>' +
-			'<td>' + getMedalImageHTML(r.medal) + '</td>' +
-			'<td>' + getRankImageHTML(r.rank) + '</td>' +
-			'<td>' + r.score + '</td>' +
+			'<td class="result-type">' + r.type.toUpperCase() + '</td>' +
+			'<td class="result-medal">' + getMedalImageHTML(r.medal) + '</td>' +
+			'<td class="result-rank">' + getRankImageHTML(r.rank) + '</td>' +
+			'<td class="result-score">' + r.score + '</td>' +
 			'</tr>'
 		);
 
@@ -180,9 +192,7 @@
 			}
 
 			return '<table class="selected-results-table">' +
-				'<thead><tr>' +
-				'<th>ジャンル名</th><th>曲名</th><th>タイプ</th><th>メダル</th><th>ランク</th><th>スコア</th>' +
-				'</tr></thead>' +
+				'<thead>' + resultHeaderHTML + '</thead>' +
 				'<tbody>' + selectedResults.map(getResultHTML).join('') + '</tbody>' +
 				'</table>';
 
