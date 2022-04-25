@@ -191,18 +191,18 @@ input {
 /**
  * アプリケーション > リザルト一覧
  */
-.results-wrapper {
+.filtered-results {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 }
 
-.results-table {
+.selected-results-table {
 	margin: 10px;
 }
 
-.results-table td,
-.results-table th {
+.selected-results-table td,
+.selected-results-table th {
 	border: 1px #fff solid;
 }
 
@@ -224,7 +224,7 @@ input {
 	padding-right: 8px;
 }
 
-.results-empty {
+.filtered-results-empty {
 	height: 64px;
 	padding-left: 16px;
 	padding-right: 16px;

@@ -150,7 +150,7 @@
 	// 
 	const filterResults = (() => {
 
-		const resultsElement = document.getElementById('results');
+		const selectedResultsElement = document.getElementById('selected-results');
 		const paginationElements = ['pagination-header', 'pagination-footer'].map(id => document.getElementById(id));
 
 		// 
@@ -176,10 +176,10 @@
 		const getSelectedResultsHTML = selectedResults => {
 
 			if ( selectedResults.length === 0 ) {
-				return '<div class="results-empty">条件に一致するデータはありません。</div>';
+				return '<div class="filtered-results-empty">条件に一致するデータはありません。</div>';
 			}
 
-			return '<table id="results-table" class="results-table">' +
+			return '<table class="selected-results-table">' +
 				'<thead><tr>' +
 				'<th>ジャンル名</th><th>曲名</th><th>タイプ</th><th>メダル</th><th>ランク</th><th>スコア</th>' +
 				'</tr></thead>' +
@@ -274,7 +274,7 @@
 
 			const selectedResults = filteredResults.slice(offset, offset + RESULT_LIMIT);
 
-			resultsElement.innerHTML = getSelectedResultsHTML(selectedResults);
+			selectedResultsElement.innerHTML = getSelectedResultsHTML(selectedResults);
 
 		};
 
