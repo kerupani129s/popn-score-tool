@@ -33,6 +33,8 @@
 	];
 
 	// 
+	const TYPES_ABBR = new Map(['E', 'N', 'H', 'EX'].map((abbr, i) => [TYPES[i], abbr]));
+
 	const MEDALS_ALT = new Map([
 		'金★',
 		'銀★', '銀◆', '銀●',
@@ -142,6 +144,12 @@
 	})();
 
 	// 
+	const getResultTypeHTML = type => {
+		const typeText = type.toUpperCase();
+		return '<span class="result-type__abbr" title="' + typeText + '">' + TYPES_ABBR.get(type) + '</span>' +
+			'<span class="result-type__exp">' + typeText + '</span>';
+	};
+
 	const getMedalImageURL = name => './images/medal/svg/' + name.replace('.png', '.svg') + '?' + MEDAL_IMAGE_PARAM;
 
 	const getMedalImageHTML = medal => '<img src="' + getMedalImageURL(medal) + '" alt="' + MEDALS_ALT.get(medal) + '">';
@@ -158,9 +166,18 @@
 			'<tr>' +
 			'<th class="music music-genre">ジャンル名</th>' +
 			'<th class="music music-title">曲名</th>' +
-			'<th class="result-type">タイプ</th>' +
-			'<th class="result-medal">メダル</th>' +
-			'<th class="result-rank">ランク</th>' +
+			'<th class="result-type">' +
+			'<span class="result-type__abbr" title="タイプ">タ</span>' +
+			'<span class="result-type__exp">タイプ</span>' +
+			'</th>' +
+			'<th class="result-medal">' +
+			'<span class="result-medal__abbr" title="メダル">メ</span>' +
+			'<span class="result-medal__exp">メダル</span>' +
+			'</th>' +
+			'<th class="result-rank">' +
+			'<span class="result-rank__abbr" title="ランク">ラ</span>' +
+			'<span class="result-rank__exp">ランク</span>' +
+			'</th>' +
 			'<th class="result-score">スコア</th>' +
 			'</tr>'
 		);
@@ -178,7 +195,7 @@
 			) : (
 				'<td colspan="2" class="music">' + escapeHTML(r.music.genre) + '</td>'
 			)) +
-			'<td class="result-type">' + r.type.toUpperCase() + '</td>' +
+			'<td class="result-type">' + getResultTypeHTML(r.type) + '</td>' +
 			'<td class="result-medal">' + getMedalImageHTML(r.medal) + '</td>' +
 			'<td class="result-rank">' + getRankImageHTML(r.rank) + '</td>' +
 			'<td class="result-score">' + r.score + '</td>' +

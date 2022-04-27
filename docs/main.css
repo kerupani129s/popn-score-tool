@@ -199,7 +199,8 @@ input {
 }
 
 .selected-results {
-	margin: 10px 0;
+	margin-top: 8px;
+	margin-bottom: 8px;
 }
 
 .selected-results-table {
@@ -208,17 +209,84 @@ input {
 	white-space: nowrap;
 }
 
-.selected-results-table th.result-type {
-	width: 80px;
+@media (min-width: 768px) {
+	.selected-results {
+		margin-left: 12px;
+		margin-right: 12px;
+	}
+
+	.selected-results-table th.result-type {
+		width: 80px;
+	}
+
+	.selected-results-table th.result-medal,
+	.selected-results-table th.result-rank {
+		width: 56px;
+	}
+
+	.selected-results-table th.result-score {
+		width: 72px;
+	}
+
+	.result-type__abbr,
+	.result-medal__abbr,
+	.result-rank__abbr {
+		display: none;
+	}
 }
 
-.selected-results-table th.result-medal,
-.selected-results-table th.result-rank {
-	width: 56px;
-}
+@media (max-width: 767px) {
+	.selected-results-table tr {
+		display: grid;
+		grid-template-columns: auto repeat(3, 36px);
+		border-bottom: 1px #ccc solid;
+	}
 
-.selected-results-table th.result-score {
-	width: 72px;
+	.selected-results-table th.music-genre,
+	.selected-results-table td.music-genre {
+		grid-column: 1;
+		grid-row: 1;
+	}
+
+	.selected-results-table th.music-title,
+	.selected-results-table td.music-title {
+		grid-column: 1;
+		grid-row: 2;
+	}
+
+	.selected-results-table th.result-type,
+	.selected-results-table td.result-type {
+		grid-column: 2;
+		grid-row: 1 / 3;
+	}
+
+	.selected-results-table td.result-type {
+		text-align: center;
+	}
+
+	.selected-results-table th.result-medal,
+	.selected-results-table td.result-medal {
+		grid-column: 3;
+		grid-row: 1;
+	}
+
+	.selected-results-table th.result-rank,
+	.selected-results-table td.result-rank {
+		grid-column: 4;
+		grid-row: 1;
+	}
+
+	.selected-results-table th.result-score,
+	.selected-results-table td.result-score {
+		grid-column: 3 / 5;
+		grid-row: 2;
+	}
+
+	.result-type__exp,
+	.result-medal__exp,
+	.result-rank__exp {
+		display: none;
+	}
 }
 
 .selected-results-table td.music {
