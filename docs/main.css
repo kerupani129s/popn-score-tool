@@ -358,10 +358,14 @@ input {
 }
 
 .filtered-results-empty {
-	height: 64px;
-	padding-left: 16px;
-	padding-right: 16px;
+	padding: 24px 12px;
 	border: 1px #e0e0e0 solid;
-	line-height: 64px;
 	text-align: center;
+}
+
+@media (max-width: 767px) {
+	.filtered-results-empty {
+		margin-left: 12px;
+		margin-right: 12px;
+	}
 }
