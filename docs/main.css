@@ -149,17 +149,47 @@ input {
  * アプリケーション > トータル表
  */
 .total-tables {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
-	align-items: flex-start;
+	margin: 0 auto;
+	max-width: 820px;
 }
 
 .total-table {
-	margin: 10px;
 	border-collapse: separate;
 	border-spacing: 0;
+	table-layout: fixed;
+	white-space: nowrap;
 	--selected-bg-color: #ecf6ff;
+}
+
+@media (min-width: 768px) {
+	.total-tables {
+		display: flex;
+		justify-content: space-around;
+		align-items: flex-start;
+	}
+
+	.total-table {
+		flex: 1;
+		margin: 0 12px
+	}
+
+	.total-table col:first-of-type {
+		width: 84px;
+	}
+}
+
+@media (max-width: 767px) {
+	.total-table {
+		width: 100%;
+	}
+
+	.total-table:not(:first-of-type) {
+		margin-top: 12px;
+	}
+
+	.total-table col:first-of-type {
+		width: 76px;
+	}
 }
 
 .total-table td {
@@ -194,7 +224,7 @@ input {
  * アプリケーション > リザルト一覧
  */
 .filtered-results {
-	margin: 0 auto;
+	margin: 16px auto 0;
 	max-width: 820px;
 }
 

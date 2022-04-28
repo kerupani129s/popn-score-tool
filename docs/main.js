@@ -144,12 +144,6 @@
 	})();
 
 	// 
-	const getResultTypeHTML = type => {
-		const typeText = type.toUpperCase();
-		return '<span class="result-type__abbr" title="' + typeText + '">' + TYPES_ABBR.get(type) + '</span>' +
-			'<span class="result-type__exp">' + typeText + '</span>';
-	};
-
 	const getMedalImageURL = name => './images/medal/svg/' + name.replace('.png', '.svg') + '?' + MEDAL_IMAGE_PARAM;
 
 	const getMedalImageHTML = medal => '<img src="' + getMedalImageURL(medal) + '" alt="' + MEDALS_ALT.get(medal) + '">';
@@ -186,6 +180,12 @@
 			.replaceAll('&', '&amp;')
 			.replaceAll('<', '&lt;').replaceAll('>', '&gt;')
 			.replaceAll('"', '&quot;').replaceAll('\'', '&#39;');
+
+		const getResultTypeHTML = type => {
+			const typeText = type.toUpperCase();
+			return '<span class="result-type__abbr" title="' + typeText + '">' + TYPES_ABBR.get(type) + '</span>' +
+				'<span class="result-type__exp">' + typeText + '</span>';
+		};
 
 		const getResultHTML = r => (
 			'<tr>' +
@@ -374,8 +374,13 @@
 		};
 
 		// 
+		const getTypeHTML = type => {
+			const typeText = type.toUpperCase();
+			return '<span title="' + typeText + '">' + TYPES_ABBR.get(type) + '</span>';
+		};
+
 		const columnHeaders = (() => {
-			const row = TYPES.map(type => type.toUpperCase());
+			const row = TYPES.map(type => getTypeHTML(type));
 			row.unshift('');
 			row.push('合計');
 			return row;
