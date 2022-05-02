@@ -45,7 +45,9 @@ input {
 }
 
 .site-main {
+	margin: 0 auto;
 	padding-bottom: 8px;
+	max-width: 820px;
 }
 
 @media (min-width: 768px) {
@@ -148,11 +150,6 @@ input {
 /**
  * アプリケーション > トータル表
  */
-.total-tables {
-	margin: 0 auto;
-	max-width: 820px;
-}
-
 .total-table {
 	border-collapse: separate;
 	border-spacing: 0;
@@ -224,8 +221,7 @@ input {
  * アプリケーション > リザルト一覧
  */
 .filtered-results {
-	margin: 16px auto 0;
-	max-width: 820px;
+	margin-top: 16px;
 }
 
 .selected-results {
