@@ -352,21 +352,21 @@
 
 			// 
 			tableElement.createTHead().innerHTML = '<tr>' +
-				columnHeaders.map(cell => '<th>' + cell + '</th>').join('') +
+				columnHeaders.map(cell => '<th tabindex="0">' + cell + '</th>').join('') +
 				'</tr>';
 
 			tableElement.createTBody().innerHTML = table.map((row, i) => (
 				'<tr>' +
-				'<th>' + rowHeaders[i] + '</th>' +
-				row.map(cell => '<td>' + cell + '</td>').join('') +
-				'<td>' + rowTotal[i] + '</td>' +
+				'<th tabindex="0">' + rowHeaders[i] + '</th>' +
+				row.map(cell => '<td tabindex="0">' + cell + '</td>').join('') +
+				'<td tabindex="0">' + rowTotal[i] + '</td>' +
 				'</tr>'
 			)).join('');
 
 			tableElement.createTFoot().innerHTML = '<tr>' +
-				'<th>' + rowHeaderOfColumnTotal + '</th>' +
-				columnTotal.map(cell => '<td>' + cell + '</td>').join('') +
-				'<td>' + grandTotal + '</td>' +
+				'<th tabindex="0">' + rowHeaderOfColumnTotal + '</th>' +
+				columnTotal.map(cell => '<td tabindex="0">' + cell + '</td>').join('') +
+				'<td tabindex="0">' + grandTotal + '</td>' +
 				'</tr>';
 
 			return tableElement;
