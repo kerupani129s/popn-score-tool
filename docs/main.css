@@ -90,6 +90,10 @@ input {
 	margin-right: 12px;
 }
 
+.site-main h2 {
+	border-bottom: 1px solid gainsboro;
+}
+
 .site-main p {
 	padding: 0 12px;
 }
