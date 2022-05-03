@@ -9,9 +9,9 @@ function content_hash() {
 }
 
 # 
-VIEWER_MAIN_CSS_PARAM="$(content_hash ./docs/main.css)"
+VIEWER_MAIN_CSS_PARAM="v=$(content_hash ./docs/main.css)"
 readonly VIEWER_MAIN_CSS_PARAM
-VIEWER_MAIN_JS_PARAM="$(content_hash ./docs/main.js)"
+VIEWER_MAIN_JS_PARAM="v=$(content_hash ./docs/main.js)"
 readonly VIEWER_MAIN_JS_PARAM
 
 # 
