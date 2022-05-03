@@ -220,7 +220,7 @@
 			isCurrentPage ? (
 				'<span class="page-number page-number--current">' + pageNo + '</span>'
 			) : (
-				'<span class="page-number" data-page-no="' + pageNo + '">' + pageNo + '</span>'
+				'<span role="button" tabindex="0" class="page-number" data-page-no="' + pageNo + '">' + pageNo + '</span>'
 			)
 		);
 

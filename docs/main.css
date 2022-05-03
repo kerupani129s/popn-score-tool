@@ -341,6 +341,9 @@ input {
 	padding-right: 8px;
 	border: 1px #d0d0d0 solid;
 	background-color: #f6f6f6;
+}
+
+.page-number:not(.page-number--current) {
 	cursor: pointer;
 }
 
