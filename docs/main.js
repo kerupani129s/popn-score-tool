@@ -1,9 +1,12 @@
 (() => {
 
 	// 定数
-	const resultsLimit   = 20;
-	const pagesLimitHalf = 4;
-	const pagesLimit     = pagesLimitHalf * 2 + 1;
+	const MEDAL_IMAGE_PARAM = 'v0.2.0';
+
+	// 
+	const RESULT_LIMIT    = 20;
+	const PAGE_LIMIT_HALF = 4;
+	const PAGE_LIMIT      = PAGE_LIMIT_HALF * 2 + 1;
 
 	// 
 	const MEDAL_NONE = 'meda_none.png';
@@ -11,9 +14,9 @@
 	const SCORE_NONE = '-';
 
 	// 
-	const types = ['easy', 'normal', 'hyper', 'ex'];
+	const TYPES = ['easy', 'normal', 'hyper', 'ex'];
 
-	const medals = [
+	const MEDALS = [
 		'meda_a.png',
 		'meda_b.png', 'meda_c.png', 'meda_d.png',
 		'meda_e.png', 'meda_f.png', 'meda_g.png',
@@ -22,12 +25,31 @@
 		// MEDAL_NONE,
 	];
 
-	const ranks = [
+	const RANKS = [
 		'rank_s.png',
 		'rank_a3.png', 'rank_a2.png', 'rank_a1.png',
 		'rank_b.png', 'rank_c.png', 'rank_d.png', 'rank_e.png',
 		// RANK_NONE,
 	];
+
+	// 
+	const TYPES_ABBR = new Map(['E', 'N', 'H', 'EX'].map((abbr, i) => [TYPES[i], abbr]));
+
+	const MEDALS_ALT = new Map([
+		'金★',
+		'銀★', '銀◆', '銀●',
+		'銅★', '銅◆', '銅●',
+		'若葉', // メモ: イージークリアの順番注意
+		'黒★', '黒◆', '黒●',
+		// '-',
+	].map((alt, i) => [MEDALS[i], alt]));
+
+	const RANKS_ALT = new Map([
+		'S',
+		'AAA', 'AA', 'A',
+		'B', 'C', 'D', 'E',
+		// '-',
+	].map((alt, i) => [RANKS[i], alt]));
 
 	// 
 	const getPlayDataFromFile = (() => {
@@ -47,10 +69,10 @@
 			if ( typeof result.music.genre !== 'string' || ! result.music.genre ) return true;
 			if ( typeof result.music.title !== 'string' || ! result.music.title ) return true;
 
-			if ( ! types.includes(result.type) ) return true;
-			if ( result.medal !== MEDAL_NONE && ! medals.includes(result.medal) ) return true;
-			if ( result.rank !== RANK_NONE && ! ranks.includes(result.rank) ) return true;
-			if ( result.score !== null && typeof result.score !== 'number' ) return true; // メモ: 今後、仕様変更する可能性を考えてコードを残す
+			if ( ! TYPES.includes(result.type) ) return true;
+			if ( result.medal !== MEDAL_NONE && ! MEDALS.includes(result.medal) ) return true;
+			if ( result.rank !== RANK_NONE && ! RANKS.includes(result.rank) ) return true; // メモ: プレー済みでも resultByType.rank === RANK_NONE の可能性あり
+			if ( Number.isNaN(result.score) ) return true;
 
 			return false;
 
@@ -75,16 +97,18 @@
 				// リザルト情報
 				const resultsByType = musicResult.results || musicResult.score; // メモ: ツール旧バージョン互換性対策
 
-				for (const type of types) {
+				for (const type of TYPES) {
 
 					const resultByType = resultsByType[type];
+
+					if ( resultByType.score === SCORE_NONE ) continue;
 
 					const result = {
 						music,
 						type,
 						medal: resultByType.medal,
 						rank: resultByType.rank, // メモ: プレー済みでも resultByType.rank === RANK_NONE の可能性あり
-						score: resultByType.score === SCORE_NONE ? null : Number(resultByType.score),
+						score: Number(resultByType.score),
 					};
 
 					if ( isInvalidResult(result) ) {
@@ -120,185 +144,121 @@
 	})();
 
 	// 
-	const getMedalImageURL = name => './images/medal/svg/' + name.replace('.png', '.svg') + '?v0.1.0';
+	const getMedalImageURL = name => './images/medal/svg/' + name.replace('.png', '.svg') + '?' + MEDAL_IMAGE_PARAM;
 
+	const getMedalImageHTML = medal => '<img src="' + getMedalImageURL(medal) + '" alt="' + MEDALS_ALT.get(medal) + '">';
+	const getRankImageHTML = rank => '<img src="' + getMedalImageURL(rank) + '" alt="' + RANKS_ALT.get(rank) + '">';
+
+	// 
 	const filterResults = (() => {
 
-		const resultsElement = document.getElementById('results');
+		const selectedResultsElement = document.getElementById('selected-results');
 		const paginationElements = ['pagination-header', 'pagination-footer'].map(id => document.getElementById(id));
 
-		const filterResults = (tableElement, row, column, results) => {
+		// 
+		const resultHeaderHTML = (
+			'<tr>' +
+			'<th class="music music-genre">ジャンル名</th>' +
+			'<th class="music music-title">曲名</th>' +
+			'<th class="result-type">' +
+			'<span class="result-type__abbr" title="タイプ">タ</span>' +
+			'<span class="result-type__exp">タイプ</span>' +
+			'</th>' +
+			'<th class="result-medal">' +
+			'<span class="result-medal__abbr" title="メダル">メ</span>' +
+			'<span class="result-medal__exp">メダル</span>' +
+			'</th>' +
+			'<th class="result-rank">' +
+			'<span class="result-rank__abbr" title="ランク">ラ</span>' +
+			'<span class="result-rank__exp">ランク</span>' +
+			'</th>' +
+			'<th class="result-score">スコア</th>' +
+			'</tr>'
+		);
 
-			// 
-			const id = tableElement.id;
+		const escapeHTML = html => html
+			.replaceAll('&', '&amp;')
+			.replaceAll('<', '&lt;').replaceAll('>', '&gt;')
+			.replaceAll('"', '&quot;').replaceAll('\'', '&#39;');
 
-			if ( ! ['medals-table', 'ranks-table'].includes(id) ) return;
-
-			const rowMax = ('medals-table' === id ? medals.length : ranks.length) + 1; // + 2 - 1 = + 1
-			const rowInner = (0 === row || row === rowMax) ? null : row - 1;
-
-			const columnMax = types.length + 1; // + 2 - 1 = + 1
-			const columnInner = (0 === column || column === columnMax) ? null : column - 1;
-
-			// 
-			const filteredResults = 'medals-table' === id ? filterMedals(rowInner, columnInner, results) : filterRanks(rowInner, columnInner, results);
-
-			updateTotalTable(tableElement, row, column, rowInner === null, columnInner === null); // メモ: 否定演算子 ! にしてしまうと 0 も true になってしまう
-			updateFilteredResult(filteredResults);
-
+		const getResultTypeHTML = type => {
+			const typeText = type.toUpperCase();
+			return '<span class="result-type__abbr" title="' + typeText + '">' + TYPES_ABBR.get(type) + '</span>' +
+				'<span class="result-type__exp">' + typeText + '</span>';
 		};
 
-		const filterMedals = (medalIndex, typeIndex, results) => {
-
-			// メモ: 否定演算子 ! にしてしまうと 0 も true になってしまう
-			const medal = medalIndex === null ? null : medals[medalIndex];
-			const type  = typeIndex === null ? null : types[typeIndex];
-
-			// 
-			return results.filter(r => ((medal === null && medals.includes(r.medal)) || r.medal === medal)
-				&& (type === null || r.type === type));
-
-		};
-
-		const filterRanks = (rankIndex, typeIndex, results) => {
-
-			// メモ: 否定演算子 ! にしてしまうと 0 も true になってしまう
-			const rank = rankIndex === null ? null : ranks[rankIndex];
-			const type = typeIndex === null ? null : types[typeIndex];
-
-			// 
-			return results.filter(r => ((rank === null && ranks.includes(r.rank)) || r.rank === rank)
-				&& (type === null || r.type === type));
-
-		};
-
-		const updateTotalTable = (tableElement, row, column, isOuterRow, isOuterColumn) => {
-
-			// 表示状態を初期化
-			const selectedElements = document.querySelectorAll('[data-selected]');
-
-			for (const selectedElement of selectedElements) {
-
-				const selectedType = selectedElement.dataset.selected;
-
-				selectedElement.classList.remove('total-table--selected-' + selectedType);
-				delete selectedElement.dataset.selected;
-
-			}
-
-			// 表示状態を更新
-			const cellElement = tableElement.rows[row].cells[column];
-
-			cellElement.classList.add('total-table--selected-cell');
-			cellElement.dataset.selected = 'cell';
-
-			if ( isOuterRow && isOuterColumn ) {
-				tableElement.classList.add('total-table--selected-all');
-				tableElement.dataset.selected = 'all';
-			} else if ( isOuterRow ) {
-				const columnElement = tableElement.getElementsByTagName('col')[column];
-				columnElement.classList.add('total-table--selected-column');
-				columnElement.dataset.selected = 'column';
-			} else if ( isOuterColumn ) {
-				const rowElement = tableElement.rows[row];
-				rowElement.classList.add('total-table--selected-row');
-				rowElement.dataset.selected = 'row';
-			}
-
-		};
-
-		const updateFilteredResultOnEvent = (event, filteredResults) => {
-			const pageNumberElement = event.currentTarget;
-			const pageNo = pageNumberElement.dataset.pageNo;
-			const pageIndex = pageNo - 1;
-			updateFilteredResult(filteredResults, pageIndex);
-		};
-
-		const updateFilteredResult = (filteredResults, pageIndex = 0) => {
-
-			// リザルト表
-			const offset = pageIndex * resultsLimit;
-
-			const selectedResults = filteredResults.slice(offset, offset + resultsLimit);
-
-			resultsElement.innerHTML = getSelectedResultsHTML(selectedResults);
-
-			// ページネーション
-			const pageNo   = pageIndex + 1;
-			const pageLast = Math.ceil(filteredResults.length / resultsLimit);
-
-			const paginationHTML = pageLast !== 0 ? getPaginationHTML(pageNo, pageLast) : '';
-
-			for (const paginationElement of paginationElements) {
-
-				paginationElement.innerHTML = paginationHTML;
-
-				// 
-				if ( 2 <= pageLast ) {
-
-					const pageNumberElements = paginationElement.querySelectorAll('[data-page-no]');
-
-					for (const pageNumberElement of pageNumberElements) {
-						pageNumberElement.addEventListener('click', event => updateFilteredResultOnEvent(event, filteredResults));
-					}
-
-				}
-
-			}
-
-		};
+		const getResultHTML = r => (
+			'<tr>' +
+			(r.music.genre !== r.music.title ? (
+				'<td class="music music-genre">' + escapeHTML(r.music.genre) + '</td>' +
+				'<td class="music music-title">' + escapeHTML(r.music.title) + '</td>'
+			) : (
+				'<td colspan="2" class="music">' + escapeHTML(r.music.genre) + '</td>'
+			)) +
+			'<td class="result-type">' + getResultTypeHTML(r.type) + '</td>' +
+			'<td class="result-medal">' + getMedalImageHTML(r.medal) + '</td>' +
+			'<td class="result-rank">' + getRankImageHTML(r.rank) + '</td>' +
+			'<td class="result-score">' + r.score + '</td>' +
+			'</tr>'
+		);
 
 		const getSelectedResultsHTML = selectedResults => {
 
 			if ( selectedResults.length === 0 ) {
-				return '<div class="results-empty">条件に一致するデータはありません。</div>';
+				return '<div class="filtered-results-empty">条件に一致するデータはありません。</div>';
 			}
 
-			return '<table id="results-table" class="results-table">' +
-				'<thead><tr>' +
-				'<th>ジャンル名</th><th>曲名</th><th>タイプ</th><th>メダル</th><th>ランク</th><th>スコア</th>' +
-				'</tr></thead>' +
-				'<tbody>' +
-				selectedResults.map(r => '<tr>' + (r.music.genre !== r.music.title ? '<td>' + escapeHTML(r.music.genre) + '</td><td>' + escapeHTML(r.music.title) + '</td>' : '<td colspan="2">' + escapeHTML(r.music.genre) + '</td>') + '<td>' + r.type.toUpperCase() + '</td><td><img src="' + getMedalImageURL(r.medal) + '"></td><td><img src="' + getMedalImageURL(r.rank) + '"></td><td>' + r.score + '</td></tr>').join('') +
-				'</tbody>' +
+			return '<table class="selected-results-table">' +
+				'<thead>' + resultHeaderHTML + '</thead>' +
+				'<tbody>' + selectedResults.map(getResultHTML).join('') + '</tbody>' +
 				'</table>';
 
 		};
 
-		const getPaginationHTML = (pageNo, pageLast) => {
+		// 
+		const getPageNumberHTML = (pageNo, isCurrentPage = false) => (
+			isCurrentPage ? (
+				'<span class="page-number page-number--current">' + pageNo + '</span>'
+			) : (
+				'<span role="button" tabindex="0" class="page-number" data-page-no="' + pageNo + '">' + pageNo + '</span>'
+			)
+		);
+
+		const getPaginationHTML = (pageNo, pageTotal) => {
 
 			let paginationHTML = '';
 
-			if ( pageLast <= pagesLimit ) {
+			if ( pageTotal <= PAGE_LIMIT ) {
 
-				for (let p = 1; p <= pageLast; p++) {
+				for (let p = 1; p <= pageTotal; p++) {
 					paginationHTML += getPageNumberHTML(p, pageNo === p);
 				}
 
 			} else {
 
-				const pageCenter = Math.min(pageLast - pagesLimitHalf, Math.max(pagesLimitHalf + 1, pageNo));
+				const pageNoCenterMin = 1 + PAGE_LIMIT_HALF;
+				const pageNoCenterMax = pageTotal - PAGE_LIMIT_HALF;
+				const pageNoCenter = Math.min(pageNoCenterMax, Math.max(pageNoCenterMin, pageNo));
 
-				if ( pagesLimitHalf + 2 <= pageCenter ) {
-
+				// 
+				if ( pageNoCenterMin < pageNoCenter ) {
 					paginationHTML += getPageNumberHTML(1);
-
-					if ( pagesLimitHalf + 3 <= pageCenter )
+					if ( pageNoCenterMin + 1 < pageNoCenter ) {
 						paginationHTML += '<span class="page-ellipsis">...</span>';
-
+					}
 				}
 
-				for (let p = pageCenter - pagesLimitHalf; p <=  pageCenter + pagesLimitHalf; p++) {
+				// 
+				for (let p = pageNoCenter - PAGE_LIMIT_HALF; p <=  pageNoCenter + PAGE_LIMIT_HALF; p++) {
 					paginationHTML += getPageNumberHTML(p, pageNo === p);
 				}
 
-				if ( pageCenter <= pageLast - pagesLimitHalf - 1 ) {
-
-					if ( pageCenter <= pageLast - pagesLimitHalf - 2 )
+				// 
+				if ( pageNoCenter < pageNoCenterMax ) {
+					if ( pageNoCenter < pageNoCenterMax - 1 ) {
 						paginationHTML += '<span class="page-ellipsis">...</span>';
-
-					paginationHTML += getPageNumberHTML(pageLast);
-
+					}
+					paginationHTML += getPageNumberHTML(pageTotal);
 				}
 
 			}
@@ -307,12 +267,66 @@
 
 		};
 
-		const getPageNumberHTML = (pageNo, isCurrentPage = false) => (isCurrentPage ? '<span class="page-number page-number--current">' + pageNo + '</span>' : '<span class="page-number" data-page-no="' + pageNo + '">' + pageNo + '</span>');
+		// 
+		const updateFilteredResultsOnEvent = (event, filteredResults) => {
+			const pageNumberElement = event.currentTarget;
+			const pageNo = Number(pageNumberElement.dataset.pageNo);
+			updateFilteredResults(filteredResults, pageNo);
+		};
 
-		const escapeHTML = html => html
-			.replaceAll('&', '&amp;')
-			.replaceAll('<', '&lt;').replaceAll('>', '&gt;')
-			.replaceAll('"', '&quot;').replaceAll('\'', '&#39;');
+		const updatePagination = (paginationElement, paginationHTML, filteredResults, pageTotal) => {
+
+			paginationElement.innerHTML = paginationHTML;
+
+			// 
+			if ( 2 <= pageTotal ) {
+
+				const pageNumberElements = paginationElement.querySelectorAll('[data-page-no]');
+
+				for (const pageNumberElement of pageNumberElements) {
+					pageNumberElement.addEventListener('click', event => (
+						updateFilteredResultsOnEvent(event, filteredResults)
+					));
+				}
+
+			}
+
+		};
+
+		// 
+		const updateSelectedResults = (filteredResults, pageNo) => {
+
+			const pageIndex = pageNo - 1;
+			const offset = pageIndex * RESULT_LIMIT;
+
+			const selectedResults = filteredResults.slice(offset, offset + RESULT_LIMIT);
+
+			selectedResultsElement.innerHTML = getSelectedResultsHTML(selectedResults);
+
+		};
+
+		const updatePagenations = (filteredResults, pageNo) => {
+
+			const pageTotal = Math.ceil(filteredResults.length / RESULT_LIMIT);
+
+			const paginationHTML = pageTotal !== 0 ? getPaginationHTML(pageNo, pageTotal) : '';
+
+			for (const paginationElement of paginationElements) {
+				updatePagination(paginationElement, paginationHTML, filteredResults, pageTotal);
+			}
+
+		};
+
+		const updateFilteredResults = (filteredResults, pageNo = 1) => {
+			updateSelectedResults(filteredResults, pageNo);
+			updatePagenations(filteredResults, pageNo);
+		};
+
+		// 
+		const filterResults = (results, callback) => {
+			const filteredResults = results.filter(callback);
+			updateFilteredResults(filteredResults);
+		};
 
 		return filterResults;
 
@@ -338,21 +352,21 @@
 
 			// 
 			tableElement.createTHead().innerHTML = '<tr>' +
-				columnHeaders.map(cell => '<th>' + cell + '</th>').join('') +
+				columnHeaders.map(cell => '<th tabindex="0">' + cell + '</th>').join('') +
 				'</tr>';
 
 			tableElement.createTBody().innerHTML = table.map((row, i) => (
 				'<tr>' +
-				'<th>' + rowHeaders[i] + '</th>' +
-				row.map(cell => '<td>' + cell + '</td>').join('') +
-				'<td>' + rowTotal[i] + '</td>' +
+				'<th tabindex="0">' + rowHeaders[i] + '</th>' +
+				row.map(cell => '<td tabindex="0">' + cell + '</td>').join('') +
+				'<td tabindex="0">' + rowTotal[i] + '</td>' +
 				'</tr>'
 			)).join('');
 
 			tableElement.createTFoot().innerHTML = '<tr>' +
-				'<th>' + rowHeaderOfColumnTotal + '</th>' +
-				columnTotal.map(cell => '<td>' + cell + '</td>').join('') +
-				'<td>' + grandTotal + '</td>' +
+				'<th tabindex="0">' + rowHeaderOfColumnTotal + '</th>' +
+				columnTotal.map(cell => '<td tabindex="0">' + cell + '</td>').join('') +
+				'<td tabindex="0">' + grandTotal + '</td>' +
 				'</tr>';
 
 			return tableElement;
@@ -360,23 +374,27 @@
 		};
 
 		// 
+		const getTypeHTML = type => {
+			const typeText = type.toUpperCase();
+			return '<span title="' + typeText + '">' + TYPES_ABBR.get(type) + '</span>';
+		};
+
 		const columnHeaders = (() => {
-			const row = types.map(type => type.toUpperCase());
+			const row = TYPES.map(type => getTypeHTML(type));
 			row.unshift('');
 			row.push('合計');
 			return row;
 		})();
 
-		const rowHeadersOfMedals = medals.map(medal => '<img src="' + getMedalImageURL(medal) + '">');
-
-		const rowHeadersOfRanks = ranks.map(rank => '<img src="' + getMedalImageURL(rank) + '">');
+		const rowHeadersOfMedals = MEDALS.map(getMedalImageHTML);
+		const rowHeadersOfRanks = RANKS.map(getRankImageHTML);
 
 		// 
 		const countOfMedals = (results, medal, type) => results.filter(r => r.type === type && r.medal === medal).length;
 
 		const createMedalsTableElement = results => {
 
-			const table = medals.map(medal => types.map(type => countOfMedals(results, medal, type)));
+			const table = MEDALS.map(medal => TYPES.map(type => countOfMedals(results, medal, type)));
 
 			// 
 			const tableElement = createTotalTableElement(table, columnHeaders, rowHeadersOfMedals, 'PLAYED');
@@ -393,7 +411,7 @@
 
 		const createRanksTableElement = results => {
 
-			const table = ranks.map(rank => types.map(type => countOfRanks(results, rank, type)));
+			const table = RANKS.map(rank => TYPES.map(type => countOfRanks(results, rank, type)));
 
 			// 
 			const tableElement = createTotalTableElement(table, columnHeaders, rowHeadersOfRanks, 'RANKED');
@@ -423,6 +441,81 @@
 
 		};
 
+		// 
+		const select = (element, type) => {
+
+			element.classList.add('total-table--selected-' + type);
+			element.dataset.selected = type;
+
+		};
+
+		const unselect = element => {
+
+			const type = element.dataset.selected;
+
+			element.classList.remove('total-table--selected-' + type);
+			delete element.dataset.selected;
+
+		};
+
+		const unselectAll = () => {
+
+			const selectedElements = totalTablesElement.querySelectorAll('[data-selected]');
+
+			for (const selectedElement of selectedElements) {
+				unselect(selectedElement);
+			}
+
+		};
+
+		const selectTotalTableCell = (tableElement, row, column, isOuterRow, isOuterColumn) => {
+
+			const cellElement = tableElement.rows[row].cells[column];
+
+			select(cellElement, 'cell');
+
+			if ( isOuterRow && isOuterColumn ) {
+				select(tableElement, 'all');
+			} else if ( isOuterRow ) {
+				const columnElement = tableElement.getElementsByTagName('col')[column];
+				select(columnElement, 'column');
+			} else if ( isOuterColumn ) {
+				const rowElement = tableElement.rows[row];
+				select(rowElement, 'row');
+			}
+
+		};
+
+		const filterResultsByMedalsTable = (results, tableElement, row, column) => {
+
+			const medal = (0 === row || row === MEDALS.length + 1) ? null : MEDALS[row - 1];
+			const type = (0 === column || column === TYPES.length + 1) ? null : TYPES[column - 1];
+
+			selectTotalTableCell(tableElement, row, column, medal === null, type === null);
+
+			// 
+			filterResults(results, r => (
+				((medal === null && MEDALS.includes(r.medal)) || r.medal === medal) &&
+				(type === null || r.type === type)
+			));
+
+		};
+
+		const filterResultsByRanksTable = (results, tableElement, row, column) => {
+
+			const rank = (0 === row || row === RANKS.length + 1) ? null : RANKS[row - 1];
+			const type = (0 === column || column === TYPES.length + 1) ? null : TYPES[column - 1];
+
+			selectTotalTableCell(tableElement, row, column, rank === null, type === null);
+
+			// 
+			filterResults(results, r => (
+				((rank === null && RANKS.includes(r.rank)) || r.rank === rank) &&
+				(type === null || r.type === type)
+			));
+
+		};
+
 		const filterResultsOnEvent = (event, results) => {
 
 			const tableElement = event.currentTarget;
@@ -435,10 +528,20 @@
 			const column = cellElement.cellIndex;
 
 			// 
-			filterResults(tableElement, row, column, results);
+			unselectAll();
+
+			// 
+			const id = tableElement.id;
+
+			if ( 'medals-table' === id ) {
+				filterResultsByMedalsTable(results, tableElement, row, column);
+			} else if ( 'ranks-table' === id ) {
+				filterResultsByRanksTable(results, tableElement, row, column);
+			}
 
 		};
 
+		// 
 		const renderTotalTables = results => {
 
 			// 
@@ -451,7 +554,7 @@
 			ranksTableElement.addEventListener('click', event => filterResultsOnEvent(event, results));
 
 			// 
-			filterResults(medalsTableElement, 0, 0, results);
+			filterResultsByMedalsTable(results, medalsTableElement, 0, 0);
 
 		};
 

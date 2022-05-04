@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="referrer" content="no-referrer">
     <title>ポップンスコアツール</title>
-    <link rel="stylesheet" href="main.css?v0.1.0">
+    <link rel="stylesheet" href="main.css?v=37e995238b14628b5efe">
     <meta property="og:title" content="ポップンスコアツール">
     <meta property="og:description" content="ポップンスコアツール">
     <meta property="og:url" content="https://kerupani129s.github.io/popn-score-tool/">
@@ -15,13 +15,12 @@
   <body>
     <div class="site">
       <header class="site-header">
-        <h1 class="site-title"><a href=".">ポップン<br>スコアツール</a></h1>
+        <div class="header-inner">
+          <h1 class="site-title"><a href=".">ポップン<br>スコアツール</a></h1>
+        </div>
       </header>
       <main class="site-main">
-        <p>
-        ※使用は自己責任でお願いします。<br>
-        ※現バージョンではスマートフォン環境で表示が崩れることがあります。
-        </p>
+        <p>※使用は自己責任でお願いします。</p>
         <h2>機能</h2>
         <ul>
           <li>ポップンのスコアデータを保存 (JSON 形式)</li>
@@ -34,8 +33,8 @@
         <p>
         (PC では上記リンクをブックマークバーまでドラッグ＆ドロップすると便利です。)
         </p>
-        <p>コピー＆ペースト用:</p>
-        <pre class="code"><span class="code__comment">javascript:</span>(d=&gt;{<span class="code__statement">const</span> s=d.createElement(<span class="code__constant">'script'</span>);s.src=<span class="code__constant">'https://kerupani129s.github.io/popn-score-tool/bookmarklet.js?timestamp='</span>+<span class="code__type">Date</span>.now()+<span class="code__constant">'ms'</span>;d.head.appendChild(s);})(<span class="code__statement">document</span>);</pre>
+        <p>コピー＆ペースト用: <button type="button" class="copy" data-type="copy" data-for="code" disabled>コピー</button></p>
+        <pre id="code" class="code"><span class="code__comment">javascript:</span>(d=&gt;{<span class="code__statement">const</span> s=d.createElement(<span class="code__constant">'script'</span>);s.src=<span class="code__constant">'https://kerupani129s.github.io/popn-score-tool/bookmarklet.js?timestamp='</span>+<span class="code__type">Date</span>.now()+<span class="code__constant">'ms'</span>;d.head.appendChild(s);})(<span class="code__statement">document</span>);</pre>
         <p>
         2. https://p.eagate.573.jp/ 上でブックマークレットを実行するとスコアデータの取得が開始されます。<br>
         ログイン状態かつ e-amusement 有料サービスに加入している必要があります。<br>
@@ -54,22 +53,23 @@
         ※本ツールでは UPPER 表記は付きません。
         </p>
         <div role="application">
-          <p><input type="file" id="file" accept=".json" class="file" disabled></p>
+          <p><input type="file" id="file" accept="application/json" class="file" disabled></p>
           <div id="result-error" class="togglable result-error">
             <p class="error">エラー!</p>
           </div>
           <div id="result-ok" class="togglable result-ok">
             <div id="total-tables" class="total-tables"></div>
-            <div class="results-wrapper">
-              <nav id="pagination-header"></nav>
-              <div id="results" class="results"></div>
-              <nav id="pagination-footer"></nav>
+            <div class="filtered-results">
+              <nav id="pagination-header" class="pagination"></nav>
+              <div id="selected-results" class="selected-results"></div>
+              <nav id="pagination-footer" class="pagination"></nav>
             </div>
           </div>
         </div>
       </main>
     </div>
 
-    <script src="main.js?v0.1.0"></script>
+    <script src="copy.js?v=d928fe1f29051664dd90"></script>
+    <script src="main.js?v=c46662ed20760d8ae0bb"></script>
   </body>
 </html>
