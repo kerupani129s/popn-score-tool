@@ -20,7 +20,8 @@ a[href]:hover {
 	text-decoration: underline;
 }
 
-input {
+input,
+button {
 	font: inherit;
 }
 

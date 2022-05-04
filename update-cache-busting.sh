@@ -13,11 +13,14 @@ VIEWER_MAIN_CSS_PARAM="v=$(content_hash ./docs/main.css)"
 readonly VIEWER_MAIN_CSS_PARAM
 VIEWER_MAIN_JS_PARAM="v=$(content_hash ./docs/main.js)"
 readonly VIEWER_MAIN_JS_PARAM
+VIEWER_COPY_JS_PARAM="v=$(content_hash ./docs/copy.js)"
+readonly VIEWER_COPY_JS_PARAM
 
 # 
 sed -Ei \
 	-e 's/(["/]main\.css\?)[^"]*/\1'"$VIEWER_MAIN_CSS_PARAM"'/g' \
 	-e 's/(["/]main\.js\?)[^"]*/\1'"$VIEWER_MAIN_JS_PARAM"'/g' \
+	-e 's/(["/]copy\.js\?)[^"]*/\1'"$VIEWER_COPY_JS_PARAM"'/g' \
 	./docs/index.html
 
 # 
