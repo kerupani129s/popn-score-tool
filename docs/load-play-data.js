@@ -1,5 +1,5 @@
 /*!
- * ポップンスコアツール v0.1.0
+ * ポップンスコアツール v0.2.0
  *
  * ポップンスコアツール is licensed under the MIT License.
  * Copyright (c) 2019 ケルパニ＠猫
@@ -87,7 +87,7 @@
 		// 
 		const parseQuery = query => new URLSearchParams(query);
 
-		const fileNameRegEx = /([^\/]*)$/;
+		const fileNameRegEx = /([^/]*)$/;
 		const getMedal = src => fileNameRegEx.exec(src)[1];
 		const getRank = getMedal;
 
