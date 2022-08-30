@@ -1,5 +1,5 @@
 /*!
- * ポップンスコアツール v0.2.0
+ * ポップンスコアツール v0.3.0
  *
  * ポップンスコアツール is licensed under the MIT License.
  * Copyright (c) 2019 ケルパニ＠猫
@@ -155,8 +155,7 @@
 
 			// 
 			const response = await fetch(url, { credentials: 'include' });
-			const blob = await response.blob(); // メモ: Shift-JIS で扱うために Blob を経由
-			const html = await readAsText(blob, 'shift-jis');
+			const html = await response.text();
 			const doc = parseHTML(html);
 
 			// 
@@ -193,26 +192,23 @@
 	await (async () => {
 
 		// 頭文字リスト
-		// 
-		// 日本語は Shift-JIS の半角カタカナを URL エンコードしたもの
-		// ASCII 文字に含まれない記号は Shift-JIS で URL エンコードしたもの
 		const INITIALS = [
-			'%B1', '%B2', '%B3', '%B4', '%B5',
-			'%B6', '%B7', '%B8', '%B9', '%BA',
-			'%BB', '%BC', '%BD', '%BE', '%BF',
-			'%C0', '%C1', '%C2', '%C3', '%C4',
-			'%C5', '%C6', '%C7', '%C8', '%C9',
-			'%CA', '%CB', '%CC', '%CD', '%CE',
-			'%CF', '%D0', '%D1', '%D2', '%D3',
-			'%D4', '%D5', '%D6',
-			'%D7', '%D8', '%D9', '%DA', '%DB',
-			'%DC', '%A6', '%DD',
+			'ｱ', 'ｲ', 'ｳ', 'ｴ', 'ｵ',
+			'ｶ', 'ｷ', 'ｸ', 'ｹ', 'ｺ',
+			'ｻ', 'ｼ', 'ｽ', 'ｾ', 'ｿ',
+			'ﾀ', 'ﾁ', 'ﾂ', 'ﾃ', 'ﾄ',
+			'ﾅ', 'ﾆ', 'ﾇ', 'ﾈ', 'ﾉ',
+			'ﾊ', 'ﾋ', 'ﾌ', 'ﾍ', 'ﾎ',
+			'ﾏ', 'ﾐ', 'ﾑ', 'ﾒ', 'ﾓ',
+			'ﾔ', 'ﾕ', 'ﾖ',
+			'ﾗ', 'ﾘ', 'ﾙ', 'ﾚ', 'ﾛ',
+			'ﾜ', 'ｦ', 'ﾝ',
 			'A', 'B', 'C', 'D', 'E', 'F', 'G',
 			'H', 'I', 'J', 'K', 'L', 'M', 'N',
 			'O', 'P', 'Q', 'R', 'S', 'T', 'U',
 			'V', 'W', 'X', 'Y', 'Z',
 			'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-			'*', '@', '%81u', '%81%AA', // メモ: 公式サイトから閲覧不可な記号
+			'@', '*', '「', '↑', // メモ: 公式サイトから閲覧不可な記号
 		];
 
 		document.body.innerHTML = '<div style="padding: 12px; font-size: 16px; line-height: 1.5; background-color: #fff; color: #000;">' +
