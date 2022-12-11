@@ -12,7 +12,7 @@
 	// 
 	const WAIT_TIME_IN_MILLISECONDS = 100;
 
-	const POPN_RESULTS_URL = 'https://p.eagate.573.jp/game/popn/riddles/playdata/mu_top.html';
+	const POPN_RESULTS_URL = 'https://p.eagate.573.jp/game/popn/unilab/playdata/mu_top.html';
 
 	// ウェブサイトを確認
 	const validateWebsite = () => {
