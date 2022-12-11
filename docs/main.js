@@ -318,6 +318,10 @@
 		};
 
 		const updateFilteredResults = (filteredResults, pageNo = 1) => {
+			console.log("平均スコア:" + filteredResults.map(x => x.score).reduce((a, b) => a + b) / filteredResults.length);
+			console.log("99k以上:" + filteredResults.filter(x => x.score >= 99000).length);
+			console.log("95k以下:" + filteredResults.filter(x => x.score <= 95000).length);
+
 			updateSelectedResults(filteredResults, pageNo);
 			updatePagenations(filteredResults, pageNo);
 		};
@@ -325,6 +329,7 @@
 		// 
 		const filterResults = (results, callback) => {
 			const filteredResults = results.filter(callback);
+			console.log({filteredResults})
 			updateFilteredResults(filteredResults);
 		};
 
