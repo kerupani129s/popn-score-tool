@@ -1,7 +1,7 @@
 (() => {
 
 	// 定数
-	const MEDAL_IMAGE_PARAM = 'v0.3.0';
+	const MEDAL_IMAGE_PARAM = 'v0.4.0';
 
 	// 
 	const RESULT_LIMIT    = 20;
