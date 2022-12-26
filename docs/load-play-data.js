@@ -1,5 +1,5 @@
 /*!
- * ポップンスコアツール v0.3.0
+ * ポップンスコアツール v0.4.0
  *
  * ポップンスコアツール is licensed under the MIT License.
  * Copyright (c) 2019 ケルパニ＠猫
@@ -12,12 +12,12 @@
 	// 
 	const WAIT_TIME_IN_MILLISECONDS = 100;
 
-	const POPN_RESULTS_URL = 'https://p.eagate.573.jp/game/popn/unilab/playdata/mu_top.html';
+	const POPN_VERSION_NAME_DEFAULT = 'unilab';
 
 	// ウェブサイトを確認
 	const validateWebsite = () => {
 
-		if ( document.domain !== 'p.eagate.573.jp' ) {
+		if ( location.hostname !== 'p.eagate.573.jp' ) {
 			throw new Error('https://p.eagate.573.jp/ 上で実行してください');
 		}
 
@@ -144,11 +144,19 @@
 		};
 
 		// 
+		const popnResultsURL = (() => {
+
+			const [, popnVersionName] = /^\/game\/popn\/([^/]+)/.exec(location.pathname) || [, POPN_VERSION_NAME_DEFAULT];
+
+			return 'https://p.eagate.573.jp/game/popn/' + popnVersionName + '/playdata/mu_top.html';
+
+		})();
+
 		const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 		const loadResults = async (results, initial, page) => {
 
-			const url = POPN_RESULTS_URL + '?page=' + page + '&genre=' + initial;
+			const url = popnResultsURL + '?page=' + page + '&genre=' + initial;
 
 			// 
 			await delay(WAIT_TIME_IN_MILLISECONDS);
