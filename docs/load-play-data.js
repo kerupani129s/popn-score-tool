@@ -7,7 +7,7 @@
  */
 (async () => {
 
-	const DEBUG = true;
+	const DEBUG = Boolean(window.BOOKMARKLET_TOOL_POPN_DEBUG) || ! document.currentScript;
 
 	// 
 	const WAIT_TIME_IN_MILLISECONDS = 100;
