@@ -1,5 +1,5 @@
 /*!
- * ポップンスコアツール v0.4.0
+ * ポップンスコアツール v0.5.0
  *
  * ポップンスコアツール is licensed under the MIT License.
  * Copyright (c) 2019 ケルパニ＠猫
@@ -7,7 +7,7 @@
  */
 (async () => {
 
-	const DEBUG = false;
+	const DEBUG = Boolean(window.BOOKMARKLET_TOOL_POPN_DEBUG) || ! document.currentScript;
 
 	// 
 	const WAIT_TIME_IN_MILLISECONDS = 100;
