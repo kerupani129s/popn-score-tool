@@ -1,5 +1,5 @@
 /*!
- * ポップンスコアツール v0.4.0
+ * ポップンスコアツール v0.5.0
  *
  * ポップンスコアツール is licensed under the MIT License.
  * Copyright (c) 2019 ケルパニ＠猫
