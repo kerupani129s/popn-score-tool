@@ -261,6 +261,11 @@ button {
 		margin-right: 12px;
 	}
 
+	.selected-results-table th.music-level {
+		width: 56px;
+		text-align: left;
+	}
+
 	.selected-results-table th.result-type {
 		width: 80px;
 	}
@@ -272,6 +277,7 @@ button {
 
 	.selected-results-table th.result-score {
 		width: 72px;
+		text-align: right;
 	}
 
 	.result-type__abbr,
@@ -388,4 +394,12 @@ button {
 		margin-left: 12px;
 		margin-right: 12px;
 	}
+}
+
+.filter {
+	margin: 0 12px 16px;
+}
+
+.filter-level, .filter-score {
+	width: 80px;
 }

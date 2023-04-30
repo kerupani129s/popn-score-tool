@@ -13,9 +13,6 @@
 	const RANK_NONE = 'rank_none.png';
 	const SCORE_NONE = '-';
 
-	// 
-	const TYPES = ['easy', 'normal', 'hyper', 'ex'];
-
 	const MEDALS = [
 		'meda_a.png',
 		'meda_b.png', 'meda_c.png', 'meda_d.png',
@@ -31,6 +28,8 @@
 		'rank_b.png', 'rank_c.png', 'rank_d.png', 'rank_e.png',
 		// RANK_NONE,
 	];
+
+	const TYPES = ['EASY', 'NORMAL', 'HYPER', 'EX'];
 
 	// 
 	const TYPES_ABBR = new Map(['E', 'N', 'H', 'EX'].map((abbr, i) => [TYPES[i], abbr]));
@@ -95,30 +94,24 @@
 				};
 
 				// リザルト情報
-				const resultsByType = musicResult.results || musicResult.score; // メモ: ツール旧バージョン互換性対策
 
-				for (const type of TYPES) {
+				if ( musicResult.score === SCORE_NONE ) continue;
 
-					const resultByType = resultsByType[type];
+				const result = {
+					music,
+					level: musicResult.level,
+					type: musicResult.diff,
+					medal: musicResult.medal,
+					rank: musicResult.rank, // メモ: プレー済みでも resultByType.rank === RANK_NONE の可能性あり
+					score: Number(musicResult.score),
+				};
 
-					if ( resultByType.score === SCORE_NONE ) continue;
-
-					const result = {
-						music,
-						type,
-						medal: resultByType.medal,
-						rank: resultByType.rank, // メモ: プレー済みでも resultByType.rank === RANK_NONE の可能性あり
-						score: Number(resultByType.score),
-					};
-
-					if ( isInvalidResult(result) ) {
-						console.error(result);
-						throw new Error('スコアデータが正しくありません');
-					}
-
-					results.push(result);
-
+				if ( isInvalidResult(result) ) {
+					console.error(result);
+					throw new Error('スコアデータが正しくありません');
 				}
+
+				results.push(result);
 
 			}
 
@@ -132,6 +125,7 @@
 			const rawPlayData = JSON.parse(text);
 
 			const results = getResults(rawPlayData);
+			console.log({rawPlayData, results})
 
 			return {
 				results,
@@ -158,6 +152,7 @@
 		// 
 		const resultHeaderHTML = (
 			'<tr>' +
+			'<th class="music music-level">レベル</th>' +
 			'<th class="music music-genre">ジャンル名</th>' +
 			'<th class="music music-title">曲名</th>' +
 			'<th class="result-type">' +
@@ -176,8 +171,7 @@
 			'</tr>'
 		);
 
-		const escapeHTML = html => html
-			.replaceAll('&', '&amp;')
+		const escapeHTML = html => html?.replaceAll('&', '&amp;')
 			.replaceAll('<', '&lt;').replaceAll('>', '&gt;')
 			.replaceAll('"', '&quot;').replaceAll('\'', '&#39;');
 
@@ -189,12 +183,9 @@
 
 		const getResultHTML = r => (
 			'<tr>' +
-			(r.music.genre !== r.music.title ? (
-				'<td class="music music-genre">' + escapeHTML(r.music.genre) + '</td>' +
-				'<td class="music music-title">' + escapeHTML(r.music.title) + '</td>'
-			) : (
-				'<td colspan="2" class="music">' + escapeHTML(r.music.genre) + '</td>'
-			)) +
+			'<td class="music music-level">' + escapeHTML(r.level) + '</td>' +
+			'<td class="music music-genre">' + escapeHTML(r.music.genre) + '</td>' +
+			'<td class="music music-title">' + escapeHTML(r.music.title) + '</td>' +
 			'<td class="result-type">' + getResultTypeHTML(r.type) + '</td>' +
 			'<td class="result-medal">' + getMedalImageHTML(r.medal) + '</td>' +
 			'<td class="result-rank">' + getRankImageHTML(r.rank) + '</td>' +
@@ -318,6 +309,10 @@
 		};
 
 		const updateFilteredResults = (filteredResults, pageNo = 1) => {
+			console.log("平均スコア:" + filteredResults.map(x => x.score).reduce((a, b) => a + b) / filteredResults.length);
+			console.log("99k以上:" + filteredResults.filter(x => x.score >= 99000).length);
+			console.log("95k以下:" + filteredResults.filter(x => x.score <= 95000).length);
+
 			updateSelectedResults(filteredResults, pageNo);
 			updatePagenations(filteredResults, pageNo);
 		};
@@ -393,7 +388,6 @@
 		const countOfMedals = (results, medal, type) => results.filter(r => r.type === type && r.medal === medal).length;
 
 		const createMedalsTableElement = results => {
-
 			const table = MEDALS.map(medal => TYPES.map(type => countOfMedals(results, medal, type)));
 
 			// 
@@ -543,7 +537,6 @@
 
 		// 
 		const renderTotalTables = results => {
-
 			// 
 			totalTablesElement.innerHTML = '';
 
@@ -587,6 +580,23 @@
 			console.error(error);
 		};
 
+		
+		const filterResultsByLevelAndScore = (event, results) => {
+			const levelLow = document.getElementById("filter-level-low").value;
+			const levelHigh = document.getElementById("filter-level-high").value;
+			const scoreLow = document.getElementById("filter-score-low").value;
+			const scoreHigh = document.getElementById("filter-score-high").value;
+
+			const resultsFilteredByLevelAndScore = results.filter(r => 
+				(levelLow ? Number(r.level) >= Number(levelLow) : true) &&
+				(levelHigh ? Number(r.level) <= Number(levelHigh) : true) &&
+				(scoreLow ? Number(r.score) >= Number(scoreLow) : true) &&
+				(scoreHigh ? Number(r.score) >= Number(scoreHigh) : true)
+			);
+
+			renderTotalTables(resultsFilteredByLevelAndScore);
+		}
+
 		const convert = async file => {
 
 			initElements();
@@ -595,6 +605,10 @@
 
 				const playData = await getPlayDataFromFile(file);
 
+				document.getElementById("filter-level-low").addEventListener("keyup", event => filterResultsByLevelAndScore(event, playData.results));
+				document.getElementById("filter-level-high").addEventListener("keyup", event => filterResultsByLevelAndScore(event, playData.results));
+				document.getElementById("filter-score-low").addEventListener("keyup", event => filterResultsByLevelAndScore(event, playData.results));
+				document.getElementById("filter-score-high").addEventListener("keyup", event => filterResultsByLevelAndScore(event, playData.results));
 				renderTotalTables(playData.results);
 
 				showElement(resultOk);
